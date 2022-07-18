@@ -1,0 +1,56 @@
+@import "../../styles/color";
+
+.chat-message {
+  margin-bottom: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  max-width: 400px;
+  align-self: flex-start;
+  border-radius: 0 11px 11px 11px;
+  background-color: @gray-light;
+
+  .image {
+    width: 100%;
+  }
+  .text {
+    font-size: 12pt;
+  }
+
+  .time {
+    margin: 11px;
+    align-self: end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 9px;
+    color: @gray-text;
+  }
+}
+
+.chat-message-image {
+  max-width: 300px;
+  .time {
+    background-color: rgba(82, 82, 82, 0.5);
+    color: white;
+    width: 38px;
+    height: 14px;
+    border-radius: 7px;
+  }
+}
+
+.chat-message-viewer {
+  align-self: end;
+  background-color: @blue-light;
+  border-radius: 11px 11px 0 11px;
+  padding-right: 20px;
+  .time {
+    margin-right: 4px;
+  }
+}
+
+.chat-message-smallText {
+  flex-direction: row;
+}

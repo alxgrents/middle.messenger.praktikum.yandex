@@ -1,0 +1,9 @@
+<div class="chat-message chat-message-{{message.type}} {{#if message.isViewer}}chat-message-viewer{{/if}}">
+    {{#if message.image}}
+        <img class="image" src={{message.image}} alt="image">
+    {{/if}}
+    {{#if message.text}}
+        <div class="text">{{message.text}}</div>
+    {{/if}}
+    <div class="time">{{message.time}}</div>
+</div>

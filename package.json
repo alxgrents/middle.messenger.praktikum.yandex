@@ -1,0 +1,38 @@
+{
+  "name": "middle.messenger.praktikum.yandex",
+  "version": "1.0.0",
+  "description": "Repository for YandexPracticum ",
+  "dependencies": {
+    "express": "4.18.1",
+    "handlebars": "4.7.7",
+    "less": "4.1.3"
+  },
+  "devDependencies": {
+    "@parcel/transformer-less": "2.6.2",
+    "parcel": "2.6.2",
+    "parcel-plugin-static-files-copy": "2.6.0",
+    "parcel-reporter-static-files-copy": "1.3.4",
+    "parcel-transformer-hbs": "1.0.4"
+  },
+  "scripts": {
+    "dev": "parcel watch --no-cache --dist-dir build src/index.html",
+    "build": "parcel build --dist-dir build  --no-cache --no-source-maps src/index.html",
+    "start": "node server-src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "staticFiles": {
+    "staticPath": "static",
+    "staticOutPath": "static",
+    "watcherGlob": "**"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexandrGrents/middle.messenger.praktikum.yandex.git"
+  },
+  "author": "alx.grents@gmail.com",
+  "license": "ISC",
+  "homepage": "https://github.com/AlexandrGrents/middle.messenger.praktikum.yandex#readme",
+  "bugs": {
+    "url": "https://github.com/AlexandrGrents/middle.messenger.praktikum.yandex/issues"
+  }
+}

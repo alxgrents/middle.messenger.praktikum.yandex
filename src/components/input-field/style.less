@@ -1,0 +1,24 @@
+@import "../../styles/color";
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px;
+
+  label {
+    align-self: start;
+    font-size: 9pt;
+    color: @gray-text;
+    margin-bottom: 2px;
+  }
+  input {
+    border: none;
+    padding-bottom: 7px;
+    border-bottom: @blue-border;
+    font-size: 13pt;
+  }
+  input:focus {
+    outline: none;
+  }
+}

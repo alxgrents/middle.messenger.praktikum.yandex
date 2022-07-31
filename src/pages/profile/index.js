@@ -12,7 +12,9 @@ export const profileInfo = (props = {}) => infoTemplate(props);
  * @param {Object} [props]
  * @returns {string}
  */
-export const profileRedact = (props = {}) => redactTemplate(props);
+export const profileRedact = (props = {}) => {
+    return redactTemplate(props);
+}
 /**
  * @param {Object} [props]
  * @returns {string}

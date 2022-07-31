@@ -3,6 +3,7 @@
  * @type {{
  *     TEXT: 'text',
  *     IMAGE: 'image',
+ *     SMALL_TEXT: 'smallText',
  * }}
  */
 export default Object.freeze({

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "module": "commonjs",
+    "target": "es2019",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "lib": [
+      "es2019",
+      "dom"
+    ],
+
+    "typeRoots": [
+      "./typings"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "*": ["*", "node_modules/*/index.d.ts", "node_modules/*/types/index.d.ts"],
+    },
+  },
+}

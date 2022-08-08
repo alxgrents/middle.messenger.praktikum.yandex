@@ -5,12 +5,12 @@
         </svg>
     </div>
     <h2 class="profile-title">{{profile.display_name}}</h2>
-    {{> profile-info-item-input name="email" label="Почта" value=profile.email }}
-    {{> profile-info-item-input name="login" label="Логин" value=profile.login }}
-    {{> profile-info-item-input name="first_name" label="Имя" value=profile.first_name }}
-    {{> profile-info-item-input name="second_name" label="Фамилия" value=profile.second_name }}
-    {{> profile-info-item-input name="display_name" label="Имя в чате" value=profile.display_name }}
-    {{> profile-info-item-input name="phone" label="Телефон" value=profile.phone }}
+    {{> profile-info-item input=true name="email" label="Почта" value=profile.email }}
+    {{> profile-info-item input=true name="login" label="Логин" value=profile.login }}
+    {{> profile-info-item input=true name="first_name" label="Имя" value=profile.first_name }}
+    {{> profile-info-item input=true name="second_name" label="Фамилия" value=profile.second_name }}
+    {{> profile-info-item input=true name="display_name" label="Имя в чате" value=profile.display_name }}
+    {{> profile-info-item input=true name="phone" label="Телефон" value=profile.phone }}
 
     {{> button text="Сохранить" class="profile-submit-button"}}
 </form>

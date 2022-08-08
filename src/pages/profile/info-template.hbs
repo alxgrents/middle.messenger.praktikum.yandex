@@ -6,12 +6,12 @@
         <div class="hover-label">Поменять<br>аватар</div>
     </div>
     <h2 class="profile-title">{{profile.display_name}}</h2>
-    {{> profile-info-item-static label="Почта" value=profile.email }}
-    {{> profile-info-item-static label="Логин" value=profile.login }}
-    {{> profile-info-item-static label="Имя" value=profile.first_name }}
-    {{> profile-info-item-static label="Фамилия" value=profile.second_name }}
-    {{> profile-info-item-static label="Имя в чате" value=profile.display_name }}
-    {{> profile-info-item-static label="Телефон" value=profile.phone }}
+    {{> profile-info-item label="Почта" value=profile.email }}
+    {{> profile-info-item label="Логин" value=profile.login }}
+    {{> profile-info-item label="Имя" value=profile.first_name }}
+    {{> profile-info-item label="Фамилия" value=profile.second_name }}
+    {{> profile-info-item label="Имя в чате" value=profile.display_name }}
+    {{> profile-info-item label="Телефон" value=profile.phone }}
 
     {{> link href="#profile-redact" text="Изменить данные" class="profile-link profile-redact-link"}}
     {{> link href="#profile-change-password" text="Изменить пароль" class="profile-link"}}

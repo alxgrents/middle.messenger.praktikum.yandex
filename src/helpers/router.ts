@@ -1,8 +1,9 @@
-type Route =  () => string | HTMLElement;
-type RouteMap = Record<string, Route>
-type RerenderCallback = (html: string | HTMLElement) => void;
+import {RenderData} from "./renderer";
+type Route =  () => RenderData;
+export type RouteMap = Record<string, Route>
+type RerenderCallback = (html: RenderData) => void;
 
-export default class Router {
+export class Router {
     private readonly _map: RouteMap;
     private readonly _rerenderCallback: RerenderCallback;
     private readonly _notFoundRoute?: Route;

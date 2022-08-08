@@ -62,17 +62,18 @@ abstract class BaseBlock {
          */
         this._container.innerHTML = this.render();
 
-        this._setContainerAttribute('type');
-        this._setContainerAttribute('class');
+        this.setContainerAttribute('type');
+        this.setContainerAttribute('href');
+        this.setContainerAttribute('class');
     }
 
-    private _setContainerAttribute (attributeName: string) {
+    protected setContainerAttribute (attributeName: string) {
         if (this._props.hasOwnProperty(attributeName)) {
             this._container.setAttribute(attributeName, this._props[attributeName]);
         }
     }
 
-    protected abstract componentDidMount (): void;
+    protected componentDidMount (): void {};
     protected abstract render(): string;
 }
 

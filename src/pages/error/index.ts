@@ -1,5 +1,16 @@
 import template from './template.hbs'
 import './style.less';
+import BaseBlock from "../../common/base-block";
+
+export class ErrorPage extends BaseBlock {
+    protected render(): string {
+        return template(this._props);
+    }
+
+    protected componentDidMount(): void {
+        this._props.class = 'error-container';
+    }
+}
 
 /**
  * @param {Object} [props]

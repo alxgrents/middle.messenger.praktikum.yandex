@@ -1,9 +1,7 @@
-<div class="entry-container authorization">
-    <form action="#" onsubmit=preventDefault>
-        <h2 class="entry-title">Вход</h2>
-        {{> input-field name="login" label="Логин"}}
-        {{> input-field name="password" label="Пароль" type="password"}}
-        {{> button text="Авторизация" class="submit-button"}}
-        {{> link href="#registration" text="Нет аккаунта?" class="registration-link"}}
-    </form>
-</div>
+<form action="#" onsubmit=preventDefault>
+    <h2 class="entry-title">{{title}}</h2>
+    {{{login}}}
+    {{{password}}}
+    {{{button}}}
+    {{{toRegistration}}}
+</form>

@@ -13,6 +13,7 @@ export class Renderer {
     }
 
     render (data: RenderData) {
+        this._root.innerHTML = '';
         if (data instanceof BaseBlock) {
             this._root.appendChild(data.getContent());
         }

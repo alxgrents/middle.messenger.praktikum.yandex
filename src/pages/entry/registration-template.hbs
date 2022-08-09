@@ -1,14 +1,12 @@
-<div class="entry-container registration">
-    <form action="#" onsubmit=preventDefault>
-        <h2 class="entry-title">Регистрация</h2>
-        {{> input-field name="email" label="Почта"}}
-        {{> input-field name="login" label="Логин"}}
-        {{> input-field name="first_name" label="Имя"}}
-        {{> input-field name="second_name" label="Фамилия"}}
-        {{> input-field name="phone" label="Телефон"}}
-        {{> input-field name="password" label="Пароль" type="password"}}
-        {{> input-field name="password_repeat" label="Пароль (ещё раз)" type="password"}}
-        {{> button text="Зарегистрироваться" class="submit-button"}}
-        {{> link href="#authorization" text="Войти" class="authorization-link"}}
-    </form>
-</div>
+<form action="#" onsubmit=preventDefault>
+    <h2 class="entry-title">{{title}}</h2>
+    {{{email}}}
+    {{{login}}}
+    {{{first_name}}}
+    {{{second_name}}}
+    {{{phone}}}
+    {{{password}}}
+    {{{password_repeat}}}
+    {{{button}}}
+    {{{toAuthorization}}}
+</form>

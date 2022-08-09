@@ -3,8 +3,8 @@ import './style.less';
 import template from "./template.hbs";
 
 class ChatNavItem extends BaseBlock {
-    protected render(): string {
-        return template(this._props);
+    protected render(): DocumentFragment {
+        return this.compile(template, this._props);
     }
 
     protected componentDidMount(): void {

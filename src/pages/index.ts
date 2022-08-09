@@ -1,5 +1,5 @@
-import ErrorPage from "./error";
-import PAGE_ROUTES_MAP from "./page-routes";
+import ErrorPage from './error';
+import PAGE_ROUTES_MAP from './page-routes';
 
 const notFoundError = ErrorPage.createNotFoundPage;
 

@@ -1,14 +1,5 @@
 @import "../../styles/color";
 
-.chat-nav-item:last-of-type {
-  border-bottom: @gray-border;
-}
-.chat-nav-item:first-of-type {
-  margin-top: 12px;
-}
-.chat-nav-item-selected {
-  background-color: #E4EDFD;
-}
 .chat-nav-item {
   margin: 0 10px;
   padding: 12px 0;
@@ -26,6 +17,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
     .unread-messages {
       display: flex;
       justify-content: center;
@@ -67,4 +59,16 @@
       }
     }
   }
+}
+
+.chat-nav-item-selected {
+  background-color: #e4edfd;
+}
+
+.chat-nav-item:last-of-type {
+  border-bottom: @gray-border;
+}
+
+.chat-nav-item:first-of-type {
+  margin-top: 12px;
 }

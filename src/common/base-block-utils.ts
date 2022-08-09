@@ -1,4 +1,4 @@
-import BaseBlock from "./base-block";
+import BaseBlock from './base-block';
 import {
     BaseBlockChildren,
     BaseBlockEventListener,
@@ -6,27 +6,35 @@ import {
     BaseBlockOptions,
     BaseBlockProps,
     ProxyConfig,
-} from "./types";
+} from './types';
 
-export function proxyPropsFactory <T extends Record<string, any>>(target: T, config: ProxyConfig): T {
+export function proxyPropsFactory <T extends Record<string, any>>(
+    target: T,
+    config: ProxyConfig,
+): T {
     return new Proxy<T>(target, {
         set(target: T, key: string, value: any, receiver: any): boolean {
             const oldValue = target[key];
             const result = Reflect.set(target, key, value, receiver);
 
             // Намеренно выносим вызов коллбека после собственно самого изменения свойства
-            oldValue !== value && config.onUpdate(key, oldValue, value);
+            if (oldValue !== value) {
+                config.onUpdate(key, oldValue, value);
+            }
 
-            return result
-        }
+            return result;
+        },
     });
 }
 
-function baseBlockArrayCondition (item: any | BaseBlock | BaseBlock[]): boolean {
-    return Array.isArray(item) && item.every(subItem => subItem instanceof BaseBlock);
+function baseBlockArrayCondition(item: any | BaseBlock | BaseBlock[]): boolean {
+    return Array.isArray(item) && item.every((subItem) => subItem instanceof BaseBlock);
 }
 
-export function readBlockOptions (options: BaseBlockOptions): {children: BaseBlockChildren, props: BaseBlockProps} {
+export function readBlockOptions(options: BaseBlockOptions): {
+    children: BaseBlockChildren,
+    props: BaseBlockProps,
+} {
     const children: BaseBlockChildren = {};
     const props: BaseBlockProps = {};
 
@@ -40,17 +48,19 @@ export function readBlockOptions (options: BaseBlockOptions): {children: BaseBlo
         }
     });
 
-    return {children, props};
+    return { children, props };
 }
 
-export function compileTemplateProps (children: BaseBlockChildren, props: BaseBlockProps): Record<string, any> {
-    const propsForTemplate = {...props};
+export function compileTemplateProps(
+    children: BaseBlockChildren,
+    props: BaseBlockProps,
+): Record<string, any> {
+    const propsForTemplate = { ...props };
     Object.entries(children)
         .forEach(([key, item]) => {
             if (item instanceof BaseBlock) {
-                propsForTemplate[key] = createMockElementHtml(item)
-            }
-            else if (baseBlockArrayCondition(item)) {
+                propsForTemplate[key] = createMockElementHtml(item);
+            } else if (baseBlockArrayCondition(item)) {
                 propsForTemplate[key] = item.map(createMockElementHtml);
             }
         });
@@ -58,43 +68,51 @@ export function compileTemplateProps (children: BaseBlockChildren, props: BaseBl
     return propsForTemplate;
 }
 
-function replaceMockElement (root: DocumentFragment, child: BaseBlock) {
+function replaceMockElement(root: DocumentFragment, child: BaseBlock) {
     const mock = root.querySelector(`[data-id="${child.id}"]`);
-    mock && mock.replaceWith(child.getContent());
-    !mock && console.error('can not replace!', child.id, mock, child);
+    if (mock) {
+        mock.replaceWith(child.getContent());
+    } else {
+        // eslint-disable-next-line no-console
+        console.error('can not replace!', child.id, mock, child);
+    }
 }
 
-export function replaceAllMockElements (root: DocumentFragment, children: Array<BaseBlock | BaseBlock[]>) {
-    children.forEach(item => {
+export function replaceAllMockElements(
+    root: DocumentFragment,
+    children: Array<BaseBlock | BaseBlock[]>,
+) {
+    children.forEach((item) => {
         if (item instanceof BaseBlock) {
             replaceMockElement(root, item);
-        }
-        else if (baseBlockArrayCondition(item)) {
-            item.forEach(subItem => replaceMockElement(root, subItem));
+        } else if (baseBlockArrayCondition(item)) {
+            item.forEach((subItem) => replaceMockElement(root, subItem));
         }
     });
 }
 
-export function createMockElementHtml (item: BaseBlock): string {
+export function createMockElementHtml(item: BaseBlock): string {
     return `<div data-id="${item.id}">${item.id}</div>`;
 }
 
-function iterateByEvents (events: BaseBlockEvents, callback: (eventName: string, subItem: BaseBlockEventListener) => void): void {
+function iterateByEvents(
+    events: BaseBlockEvents,
+    callback: (eventName: string, subItem: BaseBlockEventListener) => void,
+): void {
     Object.entries(events).forEach(([eventName, item]) => {
         if (Array.isArray(item)) {
-            item.forEach(subItem => callback(eventName, subItem));
-        }
-        else if (typeof item === 'function') {
+            item.forEach((subItem) => callback(eventName, subItem));
+        } else if (typeof item === 'function') {
             callback(eventName, item);
         }
     });
 }
 
-export function addEvents (element: HTMLElement, events?: BaseBlockEvents) {
-    events && iterateByEvents(events, element.addEventListener.bind(element));
+export function addEvents(element: HTMLElement, events?: BaseBlockEvents) {
+    if (events) iterateByEvents(events, element.addEventListener.bind(element));
 }
 
 // Удаляет только те евенты, которые есть в events
-export function removeEvents (element: HTMLElement, events?: BaseBlockEvents) {
-    events && iterateByEvents(events, element.removeEventListener.bind(element));
+export function removeEvents(element: HTMLElement, events?: BaseBlockEvents) {
+    if (events) iterateByEvents(events, element.removeEventListener.bind(element));
 }

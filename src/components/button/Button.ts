@@ -1,9 +1,9 @@
 import template from './template.hbs';
 import './style.less';
-import BaseBlock from "../../common/base-block";
+import BaseBlock from '../../common/base-block';
 
 class Button extends BaseBlock {
-    constructor (props: any = {}) {
+    constructor(props: any = {}) {
         super(props, 'button');
     }
 
@@ -12,7 +12,7 @@ class Button extends BaseBlock {
     }
 
     protected componentDidMount(): void {
-        this._props.class = this._props.class + ' base-button';
+        this._props.class = `${this._props.class} base-button`;
     }
 }
 

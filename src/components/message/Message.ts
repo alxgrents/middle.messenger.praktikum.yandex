@@ -1,6 +1,6 @@
-import BaseBlock from "../../common/base-block";
+import BaseBlock from '../../common/base-block';
 import './style.less';
-import template from "./template.hbs";
+import template from './template.hbs';
 
 class Message extends BaseBlock {
     protected render(): string {
@@ -8,7 +8,10 @@ class Message extends BaseBlock {
     }
 
     protected componentDidMount(): void {
-        this._props.class = `chat-message chat-message-${this._props.type} ${this._props.isViewer ? 'chat-message-viewer' : ''}`;
+        this._props.class = `chat-message chat-message-${this._props.type} ${this._props.isViewer
+            ? 'chat-message-viewer'
+            : ''
+        }`;
     }
 }
 

@@ -1,4 +1,4 @@
-import BaseBlock from "../../common/base-block";
+import BaseBlock from '../../common/base-block';
 import template from './template.hbs';
 import './style.less';
 

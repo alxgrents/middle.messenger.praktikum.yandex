@@ -1,4 +1,4 @@
-import EventEmitter from "../helpers/event-emitter";
+import EventEmitter from '../helpers/event-emitter';
 import {
     readBlockOptions,
     proxyPropsFactory,
@@ -6,13 +6,13 @@ import {
     addEvents,
     compileTemplateProps,
     replaceAllMockElements,
-} from "./base-block-utils";
-import uniqueId from "../utils/unique-id";
+} from './base-block-utils';
+import uniqueId from '../utils/unique-id';
 import {
     BaseBlockChildren, BaseBlockEventListener,
     BaseBlockOptions,
     BaseBlockProps,
-} from "./types";
+} from './types';
 
 enum Events {
     init = 'init',
@@ -22,16 +22,21 @@ enum Events {
 
 abstract class BaseBlock {
     public readonly id = uniqueId();
+
     private readonly _events = new EventEmitter();
-    protected readonly _props: BaseBlockProps
-    protected readonly _children: BaseBlockChildren
+
+    protected readonly _props: BaseBlockProps;
+
+    protected readonly _children: BaseBlockChildren;
+
     private readonly _tag: string;
+
     private _container: HTMLElement;
 
-    protected constructor (options: BaseBlockOptions = {}, tag: string = 'div') {
+    protected constructor(options: BaseBlockOptions = {}, tag: string = 'div') {
         const {
             children,
-            props
+            props,
         } = readBlockOptions(options);
 
         this._tag = tag;
@@ -43,11 +48,11 @@ abstract class BaseBlock {
         this._events.emit(Events.init);
     }
 
-    public getContent (): HTMLElement {
+    public getContent(): HTMLElement {
         return this._container;
     }
 
-    public update (props: Record<string, any>): void {
+    public update(props: Record<string, any>): void {
         Object.assign(this._props, props);
     }
 
@@ -55,20 +60,21 @@ abstract class BaseBlock {
      * Метод реализован для того, чтобы былв возможность вложенности компонентов
      * Метод будет вызываться для детей при componentDidMount родителя
      */
-    public dispatchComponentDidMount (): void {
+    public dispatchComponentDidMount(): void {
         this._events.emit(Events.componentDidMount);
     }
 
-    protected componentDidMount (): void {};
+    protected componentDidMount(): void {}
+
     protected abstract render(): string | DocumentFragment;
 
-    protected setContainerAttribute (attributeName: string) {
-        if (this._props.hasOwnProperty(attributeName)) {
+    protected setContainerAttribute(attributeName: string) {
+        if (attributeName in this._props) {
             this._container.setAttribute(attributeName, this._props[attributeName]);
         }
     }
 
-    protected compile (template: (props?: any) => string, props: BaseBlockProps): DocumentFragment {
+    protected compile(template: (props?: any) => string, props: BaseBlockProps): DocumentFragment {
         const propsForTemplate = compileTemplateProps(this._children, props);
 
         const fragment = document.createElement('template');
@@ -90,17 +96,18 @@ abstract class BaseBlock {
         this._container = document.createElement(this._tag);
     }
 
-    private _componentDidMount (): void {
+    private _componentDidMount(): void {
         this.componentDidMount();
-        this._children && Object.values(this._children).forEach(item => {
-            if (Array.isArray(item)) {
-                item.forEach(subItem => subItem.dispatchComponentDidMount());
-            }
-            else {
-                item.dispatchComponentDidMount()
-            }
-        });
-    };
+        if (this._children !== undefined) {
+            Object.values(this._children).forEach((item) => {
+                if (Array.isArray(item)) {
+                    item.forEach((subItem) => subItem.dispatchComponentDidMount());
+                } else {
+                    item.dispatchComponentDidMount();
+                }
+            });
+        }
+    }
 
     private _init() {
         this._createContainer();
@@ -127,8 +134,7 @@ abstract class BaseBlock {
                 либо сразу в DOM-элементы возвращать из compile DOM-ноду
             */
             this._container.innerHTML = block;
-        }
-        else {
+        } else {
             this._container.innerHTML = '';
             this._container.appendChild(block);
         }
@@ -137,26 +143,23 @@ abstract class BaseBlock {
         this._setContainerAttributes();
     }
 
-    protected addBlockEvent (eventName: string, callback: BaseBlockEventListener) {
+    protected addBlockEvent(eventName: string, callback: BaseBlockEventListener) {
         this.getContent().addEventListener(eventName, callback);
         if (this._props.events) {
             const listeners = this._props.events[eventName];
             if (listeners === undefined) {
                 this._props.events[eventName] = callback;
-            }
-            else if (typeof listeners === 'function') {
+            } else if (typeof listeners === 'function') {
                 this._props.events[eventName] = [listeners, callback];
-            }
-            else if (Array.isArray(listeners)) {
+            } else if (Array.isArray(listeners)) {
                 listeners.push(callback);
             }
-        }
-        else {
-            this._props.events = {[eventName]: callback};
+        } else {
+            this._props.events = { [eventName]: callback };
         }
     }
 
-    private _setContainerAttributes () {
+    private _setContainerAttributes() {
         this.setContainerAttribute('type');
         this.setContainerAttribute('href');
         this.setContainerAttribute('name');

@@ -1,8 +1,8 @@
-import BaseBlock from "../../common/base-block";
+import BaseBlock from '../../common/base-block';
 import './style.less';
 import template from './template.hbs';
-import ChatNavItem from "../../components/chat-nav-item";
-import Message from "../../components/message";
+import ChatNavItem from '../../components/chat-nav-item';
+import Message from '../../components/message';
 
 class ChatPage extends BaseBlock {
     protected render(): string | DocumentFragment {
@@ -21,9 +21,9 @@ class ChatPage extends BaseBlock {
         } = props;
 
         return new ChatPage({
-            chats: chats.map((chat: any) => new ChatNavItem({chat})),
+            chats: chats.map((chat: any) => new ChatNavItem({ chat })),
             currentChat,
-            messages: messages.map((message: any) => new Message({message})),
+            messages: messages.map((message: any) => new Message({ message })),
         });
     }
 }

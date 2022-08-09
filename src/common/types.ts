@@ -1,4 +1,4 @@
-import BaseBlock from "./base-block";
+import BaseBlock from './base-block';
 
 export type ProxyConfig = {
     onUpdate: <T extends any>(key: string, oldValue: T, newValue: T) => any,

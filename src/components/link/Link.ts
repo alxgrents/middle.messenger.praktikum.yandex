@@ -1,9 +1,9 @@
-import BaseBlock from "../../common/base-block";
+import BaseBlock from '../../common/base-block';
 import './style.less';
-import template from "./template.hbs";
+import template from './template.hbs';
 
 class Link extends BaseBlock {
-    constructor (props: any = {}) {
+    constructor(props: any = {}) {
         super(props, 'a');
     }
 
@@ -12,7 +12,7 @@ class Link extends BaseBlock {
     }
 
     protected componentDidMount(): void {
-        this._props.class = this._props.class + ' base-link';
+        this._props.class = `${this._props.class} base-link`;
     }
 }
 

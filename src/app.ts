@@ -4,24 +4,26 @@ import {
     notFoundError,
     PAGE_ROUTES_MAP,
 } from './pages';
-import {Router} from "./helpers/router";
-import {Renderer} from "./helpers/renderer";
+import { Router } from './helpers/router';
+import { Renderer } from './helpers/renderer';
 
-function getRoot (rootSelector: string): HTMLElement {
+function getRoot(rootSelector: string): HTMLElement {
     const root = document.querySelector(rootSelector);
 
     if (root instanceof HTMLElement) {
         return root;
     }
-    throw new Error("Root element not found!");
+    throw new Error('Root element not found!');
 }
 
 export default class App {
     private readonly _root: HTMLElement;
+
     private readonly _router: Router;
+
     private readonly _renderer: Renderer;
 
-    constructor (rootSelector: string) {
+    constructor(rootSelector: string) {
         this._root = getRoot(rootSelector);
         this._renderer = new Renderer(this._root);
         this._router = new Router(PAGE_ROUTES_MAP, this._renderer.render, notFoundError);
@@ -30,7 +32,7 @@ export default class App {
     /**
      * @public
      */
-    init () {
+    init() {
         this._router.init();
     }
 }

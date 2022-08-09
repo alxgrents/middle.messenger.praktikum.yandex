@@ -3,5 +3,5 @@
  */
 declare module '*.hbs' {
     const value: (props?: any) => string;
-    export default value
+    export default value;
 }

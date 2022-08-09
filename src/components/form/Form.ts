@@ -1,10 +1,9 @@
-import BaseBlock from "../../common/base-block";
+import BaseBlock from '../../common/base-block';
 import template from './template.hbs';
-import {BaseBlockOptions} from "../../common/types";
-
+import { BaseBlockOptions } from '../../common/types';
 
 class Form extends BaseBlock {
-    constructor (options: BaseBlockOptions, tag = 'form') {
+    constructor(options: BaseBlockOptions, tag = 'form') {
         super(options, tag);
     }
 
@@ -17,17 +16,19 @@ class Form extends BaseBlock {
         this.addBlockEvent('submit', this._onSubmit.bind(this));
     }
 
-    private _onSubmit (event: Event): void {
+    private _onSubmit(event: Event): void {
         const data = this._getData();
+        // eslint-disable-next-line no-console
         console.log(data);
-        location.hash=this._props.action || '';
+        // eslint-disable-next-line no-restricted-globals
+        location.hash = this._props.action || '';
         event.preventDefault();
     }
 
-    private _getData () {
+    private _getData() {
         return Object.fromEntries(
             Array.from(this.getContent().querySelectorAll('input'))
-                .map(element => [element.name, element.value])
+                .map((element) => [element.name, element.value]),
         );
     }
 }

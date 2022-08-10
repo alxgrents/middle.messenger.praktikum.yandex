@@ -4,6 +4,8 @@ import './style.less';
 import InputField from '../../components/input-field';
 import Button from '../../components/button';
 import Link from '../../components/link';
+import Form from '../../components/form';
+import Validator from "../../helpers/validator";
 
 class AuthorizationPage extends BaseBlock {
     protected render(): DocumentFragment {
@@ -17,18 +19,37 @@ class AuthorizationPage extends BaseBlock {
     public static create() {
         return new AuthorizationPage({
             title: 'Вход',
-            login: new InputField({
-                name: 'login',
-                label: 'Логин',
-            }),
-            password: new InputField({
-                name: 'password',
-                label: 'Пароль',
-                type: 'password',
-            }),
-            button: new Button({
-                text: 'Авторизация',
-                class: 'submit-button',
+            form: new Form({
+                action: 'chat',
+                fields: [
+                    new InputField({
+                        name: 'login',
+                        label: 'Логин',
+                    }),
+                    new InputField({
+                        name: 'password',
+                        label: 'Пароль',
+                        type: 'password',
+                    }),
+                ],
+                validators: {
+                    login: Validator.create([
+                        'enCharsAndDigits',
+                        'containChar',
+                        { type: 'min', value: 3 },
+                        { type: 'max', value: 20 },
+                    ]),
+                    password: Validator.create([
+                        'containDigit',
+                        'containCapitalChar',
+                        { type: 'min', value: 8 },
+                        { type: 'max', value: 40 },
+                    ]),
+                },
+                submitButton: new Button({
+                    text: 'Авторизация',
+                    class: 'submit-button',
+                }),
             }),
             toRegistration: new Link({
                 href: '#registration',

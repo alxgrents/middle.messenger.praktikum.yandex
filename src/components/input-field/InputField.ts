@@ -8,7 +8,9 @@ class InputField extends BaseBlock {
     }
 
     protected componentDidMount(): void {
-        this._props.class = 'input-field';
+        if (!this._props.class) {
+            this._props.class = 'input-field';
+        }
     }
 }
 

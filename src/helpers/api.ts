@@ -10,6 +10,18 @@ type AbstractMethodRequestOptions = RequestOptions & {
     method: HTTPMethod,
 }
 
+enum XMLHttpRequestReadyState {
+    UNSENT = 0,
+    OPENED = 1,
+    HEADERS_RECEIVED = 2,
+    LOADING = 3,
+    DONE = 4,
+}
+
+enum HTTPStatus {
+    OK = 200,
+}
+
 class Api {
     private static _instance?: Api;
 
@@ -56,8 +68,8 @@ class Api {
             Api.setupHeaders(xhr, options.headers);
 
             xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
+                if (xhr.readyState === XMLHttpRequestReadyState.DONE) {
+                    if (xhr.status === HTTPStatus.OK) {
                         resolve();
                     } else {
                         reject();

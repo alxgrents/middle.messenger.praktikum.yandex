@@ -3,8 +3,8 @@ import {
     RegistrationPage,
 } from './entry';
 import ErrorPage from './error';
-import CHATS from '../data/chats';
-import MESSAGES from '../data/messages';
+import { CHATS } from '../data/chats';
+import { MESSAGES } from '../data/messages';
 import PROFILE from '../data/profile';
 import { RouteMap } from '../helpers/router';
 import ChatPage from './chat';
@@ -27,7 +27,6 @@ const PAGE_ROUTES_MAP: RouteMap = {
         currentChat: CHATS.find((chat) => chat.selected),
         messages: MESSAGES,
     }),
-    baseBlock: () => '',
 };
 
 export default PAGE_ROUTES_MAP;

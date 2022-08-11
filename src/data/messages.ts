@@ -1,7 +1,7 @@
 import { MessageType } from '../constants/message-type';
 import { freeze } from '../utils/freeze';
 
-type TMessage = {
+export type MessageData = {
     time: string,
     type: MessageType,
     text?: string,
@@ -9,7 +9,7 @@ type TMessage = {
     isViewer?: boolean,
 }
 
-const MESSAGES: TMessage[] = [
+export const MESSAGES: MessageData[] = freeze([
     {
         type: 'text',
         text: 'Привет! Смотри, тут всплыл интересный кусок лунной космической '
@@ -34,6 +34,4 @@ const MESSAGES: TMessage[] = [
         time: '12:00',
         isViewer: true,
     },
-];
-
-export default freeze(MESSAGES);
+]);

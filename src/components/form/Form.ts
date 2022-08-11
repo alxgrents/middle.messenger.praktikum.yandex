@@ -33,13 +33,13 @@ class Form extends BaseBlock {
 
     protected componentDidMount() {
         super.componentDidMount();
-        this.addBlockEvent('submit', this._onSubmit.bind(this));
-        this.addBlockEvent('focusin', this._validate.bind(this));
-        this.addBlockEvent('focusout', this._validate.bind(this));
-        this.addBlockEvent('input', this._validate.bind(this));
+        this.addBlockEvent('submit', this._onSubmit);
+        this.addBlockEvent('focusin', this._validate);
+        this.addBlockEvent('focusout', this._validate);
+        this.addBlockEvent('input', this._validate);
     }
 
-    private _onSubmit(event: Event): void {
+    private _onSubmit = (event: Event): void => {
         if (this._validate()) {
             const data = this._getData();
             // eslint-disable-next-line no-console
@@ -49,9 +49,9 @@ class Form extends BaseBlock {
         }
 
         event.preventDefault();
-    }
+    };
 
-    private _validate(): boolean {
+    private _validate = (): boolean => {
         const { validators } = this._props;
         if (validators !== undefined) {
             const results = Object.entries(this._inputs).map(([name, input]) => {
@@ -69,21 +69,11 @@ class Form extends BaseBlock {
                 return true;
             });
 
-            const validateResult = results.every(Boolean);
-            const button = this._children.submitButton as BaseBlock | undefined;
-            if (button) {
-                if (validateResult) {
-                    button.getContent().classList.remove('base-button-disabled');
-                } else {
-                    button.getContent().classList.add('base-button-disabled');
-                }
-            }
-
-            return validateResult;
+            return results.every(Boolean);
         }
         // Если валидация не указана, то считаем, что она всегда пройдена
         return true;
-    }
+    };
 
     private _getData() {
         return Object.fromEntries(

@@ -3,6 +3,8 @@ import './style.less';
 import template from './template.hbs';
 import ChatNavItem from '../../components/chat-nav-item';
 import Message from '../../components/message';
+import { ChatData } from '../../data/chats';
+import { MessageData } from '../../data/messages';
 
 class ChatPage extends BaseBlock {
     protected render(): string | DocumentFragment {
@@ -16,14 +18,14 @@ class ChatPage extends BaseBlock {
     public static create(props: Record<string, any>) {
         const {
             chats = [],
-            currentChat = undefined,
             messages = [],
+            currentChat,
         } = props;
 
         return new ChatPage({
-            chats: chats.map((chat: any) => new ChatNavItem({ chat })),
+            chats: chats.map((chat: ChatData) => new ChatNavItem({ chat })),
+            messages: messages.map((message: MessageData) => new Message({ message })),
             currentChat,
-            messages: messages.map((message: any) => new Message({ message })),
         });
     }
 }

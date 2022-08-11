@@ -1,6 +1,6 @@
 import { freeze } from '../utils/freeze';
 
-type Chat = {
+export type ChatData = {
     name: string,
     time: string,
     message: string,
@@ -10,12 +10,13 @@ type Chat = {
     unreadMessages?: number,
 }
 
-const CHATS: Chat[] = [
+export const CHATS: ChatData[] = freeze([
     {
         name: 'Андрей',
         time: '10:49',
         message: 'Изображение',
         unreadMessages: 2,
+        avatar: './static/icons/no-avatar.png',
     },
     {
         name: 'Киноклуб',
@@ -23,6 +24,7 @@ const CHATS: Chat[] = [
         message: 'стикер',
         isViewer: true,
         selected: true,
+        avatar: './static/icons/no-avatar.png',
     },
     {
         name: 'Илья',
@@ -31,8 +33,4 @@ const CHATS: Chat[] = [
         unreadMessages: 4,
         avatar: './static/icons/no-avatar.png',
     },
-].map((chat) => Object.assign(chat, {
-    avatar: chat.avatar || './static/icons/no-avatar.png',
-}));
-
-export default freeze(CHATS);
+]);

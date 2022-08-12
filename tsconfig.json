@@ -20,6 +20,6 @@
     "baseUrl": ".",
     "paths": {
       "*": ["*", "node_modules/*/index.d.ts", "node_modules/*/types/index.d.ts"],
-    },
-  },
+    }
+  }
 }

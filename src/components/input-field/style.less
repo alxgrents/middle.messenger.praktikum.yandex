@@ -12,13 +12,20 @@
     color: @gray-text;
     margin-bottom: 2px;
   }
+
   input {
     border: none;
     padding-bottom: 7px;
     border-bottom: @blue-border;
     font-size: 13pt;
   }
-  input:focus {
-    outline: none;
+}
+
+.input-field.invalid {
+  input {
+    border-bottom: @red-border;
+  }
+  label {
+    color: @red-text;
   }
 }

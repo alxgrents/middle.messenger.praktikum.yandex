@@ -1,19 +1,16 @@
-<div class="chat-nav-item {{#if chat.selected}}chat-nav-item-selected{{/if}}">
-    <img class="avatar" src={{#if chat.avatar}} {{chat.avatar}}{{else}}"./static/icons/no-avatar.png"{{/if}} alt="avatar">
-    <div class="message-preview">
-        <b class="name">{{chat.name}}</b>
-        <p class="message-preview-text">
-            {{#if chat.isViewer}}
-                <b class="viewer-label">Вы:</b>
-            {{/if}}
-            {{chat.message}}
-        </p>
-    </div>
-    <div class="info">
-        <span class="time">{{chat.time}}</span>
-        {{#if chat.unreadMessages }}
-            <div class="unread-messages">{{chat.unreadMessages}}</div>
+<img class="avatar" src={{#if chat.avatar}} {{chat.avatar}}{{else}}"./static/icons/no-avatar.png"{{/if}} alt="avatar">
+<div class="message-preview">
+    <b class="name">{{chat.name}}</b>
+    <p class="message-preview-text">
+        {{#if chat.isViewer}}
+            <b class="viewer-label">Вы:</b>
         {{/if}}
-    </div>
-
+        {{chat.message}}
+    </p>
+</div>
+<div class="info">
+    <span class="time">{{chat.time}}</span>
+    {{#if chat.unreadMessages }}
+        <div class="unread-messages">{{chat.unreadMessages}}</div>
+    {{/if}}
 </div>

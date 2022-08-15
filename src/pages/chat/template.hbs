@@ -1,39 +1,39 @@
-<div class="chat-container">
-    <div class="side-bar">
-        <a href="#profile" class="profile-link">
-            Профиль
-            <svg class="icon" width="6" height="10" viewBox="0 0 6 10" fill="none"><path d="M1 9L5 5L1 1" stroke="#999999"/></svg>
-        </a>
-        <input type="text" name="search" class="search" placeholder="Поиск">
-        <div class="scroll">
-            {{#each chats}}
-                {{>chat-nav-item chat=this}}
-            {{/each}}
-        </div>
+<div class="side-bar">
+    <a href="#profile" class="profile-link">
+        Профиль
+        <svg class="icon" width="6" height="10" viewBox="0 0 6 10" fill="none"><path d="M1 9L5 5L1 1" stroke="#999999"/></svg>
+    </a>
+    <input type="text" name="search" class="search" placeholder="Поиск">
+    <div class="scroll">
+        {{#each chats}}
+            {{{this}}}
+        {{/each}}
     </div>
-    <div class="chat">
-        <div class="header">
-            {{#if currentChat}}
-                <div class="current-chat-info">
-                    <img class="avatar" src="{{currentChat.avatar}}" alt="avatar">
-                    <b class="name">{{currentChat.name}}</b>
-                </div>
-            {{/if}}
-            <button class="chat-settings">
-                <svg width="3" height="16" viewBox="0 0 3 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="1.5" cy="2" r="1.5" fill="#1E1E1E"/>
-                    <circle cx="1.5" cy="8" r="1.5" fill="#1E1E1E"/>
-                    <circle cx="1.5" cy="14" r="1.5" fill="#1E1E1E"/>
-                </svg>
+</div>
+<div class="chat">
+    <div class="header">
+        {{#if currentChat}}
+            <div class="current-chat-info">
+                <img class="avatar" src="{{currentChat.avatar}}" alt="avatar">
+                <b class="name">{{currentChat.name}}</b>
+            </div>
+        {{/if}}
+        <button class="chat-settings">
+            <svg width="3" height="16" viewBox="0 0 3 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="1.5" cy="2" r="1.5" fill="#1E1E1E"/>
+                <circle cx="1.5" cy="8" r="1.5" fill="#1E1E1E"/>
+                <circle cx="1.5" cy="14" r="1.5" fill="#1E1E1E"/>
+            </svg>
 
-            </button>
-        </div>
-        <div class="content">
-            {{#each messages}}
-                {{>message message=this}}
-            {{/each}}
-        </div>
-        <div class="footer">
+        </button>
+    </div>
+    <div class="content">
+        {{#each messages}}
+            {{{this}}}
+        {{/each}}
+    </div>
+    <div class="footer">
+        <form>
             <button class="attach-file">
                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M6.18662 12.5L13.7628 4.92389L14.7056 5.8667L7.12943 13.4428L6.18662 12.5Z" fill="#999999"/>
@@ -52,6 +52,7 @@
                     <path d="M7 1L11 6L7 11" stroke="white" stroke-width="1.6"/>
                 </svg>
             </button>
-        </div>
+        </form>
+
     </div>
 </div>

@@ -11,11 +11,8 @@
   .side-bar {
     display: flex;
     flex-direction: column;
-
     background-color: @gray-light;
-    flex-basis: 200px;
-    flex-grow: 37;
-    flex-shrink: 0;
+    flex: 200px 37 0;
     border-right: @gray-border;
 
     .profile-link {
@@ -58,10 +55,11 @@
   }
 
   .chat {
-    background-color: #ffffff;
+    background-color: white;
     flex-grow: 91;
     display: flex;
     flex-direction: column;
+
     .header {
       display: flex;
       flex-direction: row;
@@ -77,6 +75,7 @@
         outline: none;
         margin-right: 11px;
       }
+
       .chat-settings:focus {
         border: none;
         outline: none;
@@ -92,12 +91,14 @@
           height: 34px;
           border-radius: 17px;
         }
+
         .name {
           font-size: 13pt;
           margin-left: 10px;
         }
       }
     }
+
     .content {
       margin: 0 20px;
       flex-grow: 1;
@@ -105,7 +106,8 @@
       flex-direction: column;
       justify-content: flex-end;
     }
-    .footer {
+
+    .footer form {
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -126,26 +128,21 @@
         padding-left: 10px;
       }
 
-      .message-input:focus {
-        outline: none;
-        border: none;
-      }
-
       .message-input::placeholder {
         font-size: 12pt;
         color: @gray-text;
         text-align: start;
       }
 
-       .attach-file {
-         display: flex;
-         justify-content: center;
-         align-items: center;
-         outline: none;
-         border: none;
-         background-color: white;
-         margin-right: 10px;
-       }
+      .attach-file {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        outline: none;
+        border: none;
+        background-color: white;
+        margin-right: 10px;
+      }
 
       .send-message {
         width: 28px;

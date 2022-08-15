@@ -1,33 +1,40 @@
-.entry-container form {
+.entry-container .entry-block {
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 340px;
   width: 90vw;
-
-
-  background: #FFFFFF;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.14);
+  background: white;
+  box-shadow: 0 0 6px rgb(0 0 0 / 14%);
   border-radius: 12px;
 
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+
+    .submit-button {
+      margin-top: auto;
+      margin-bottom: 14px;
+    }
+  }
+
   .entry-title {
-    margin: 30px auto 30px;
+    margin: 30px auto;
     font-size: 20pt;
   }
 
-  .submit-button {
-    margin-top: auto;
-    margin-bottom: 14px;
-  }
-  .registration-link, .authorization-link{
+  .registration-link,
+  .authorization-link {
     margin-bottom: 30px;
   }
 }
 
-.registration form {
+.registration .entry-block {
   height: 615px;
 }
 
-.authorization form {
+.authorization .entry-block {
   height: 450px;
 }

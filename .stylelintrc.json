@@ -1,0 +1,16 @@
+{
+  "extends": "stylelint-config-standard",
+  "ignoreFiles": ["build/*"],
+  "plugins": ["stylelint-less"],
+  "rules": {
+    "color-hex-length": "long",
+    "declaration-empty-line-before": "never",
+    "selector-class-pattern": null
+  },
+  "overrides": [
+    {
+      "files": ["*.less", "**/*.less"],
+      "customSyntax": "postcss-less"
+    }
+  ]
+}

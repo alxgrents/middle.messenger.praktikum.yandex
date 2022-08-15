@@ -1,0 +1,22 @@
+{{# if input }}
+    <div class="label">{{label}}</div>
+    <input
+            name={{name}}
+            class="value"
+
+        type="{{#if type}}{{type}}{{else}}text{{/if}}"
+
+        {{#if value}}
+            value="{{value}}"
+        {{/if}}
+
+        {{#if placeholder}}
+            placeholder={{placeholder}}
+        {{else}}
+            placeholder={{label}}
+        {{/if}}
+    >
+{{else}}
+    <div class="label">{{label}}</div>
+    <div class="value">{{value}}</div>
+{{/if}}

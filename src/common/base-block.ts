@@ -24,6 +24,7 @@ abstract class BaseBlock {
     public readonly id = uniqueId();
 
     private readonly _events = new EventEmitter();
+    private _originalDisplay?: string;
 
     protected readonly _props: BaseBlockProps;
 
@@ -165,6 +166,20 @@ abstract class BaseBlock {
         this.setContainerAttribute('name');
         this.setContainerAttribute('action');
         this.setContainerAttribute('class');
+    }
+
+    public hide (): void {
+        const originalDisplay = this.getContent().style.display;
+        if (originalDisplay !== 'none') {
+            this._originalDisplay = originalDisplay;
+        }
+        this.getContent().style.display = 'none';
+    }
+
+    public show (): void {
+        if (this._originalDisplay) {
+            this.getContent().style.display = this._originalDisplay;
+        }
     }
 }
 

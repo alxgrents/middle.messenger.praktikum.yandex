@@ -1,10 +1,11 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
 import template from './template.hbs';
+import {BaseBlockOptions} from "../../common/types";
 
 class Link extends BaseBlock {
-    constructor(props: any = {}) {
-        super(props, 'a');
+    constructor(options: BaseBlockOptions = {}) {
+        super(options, 'a');
     }
 
     protected render(): string {

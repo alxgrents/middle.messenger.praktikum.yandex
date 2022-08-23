@@ -2,20 +2,15 @@ import BaseBlock from '../../common/base-block';
 import './style.less';
 import template from './info-template.hbs';
 import ProfileInfoItem from '../../components/profile-info-item';
-import { Profile } from '../../data/profile';
 import Link from '../../components/link';
+import {BaseBlockOptions} from "../../common/types";
+import {Context} from "../../helpers/context";
 
 class ProfileInfoPage extends BaseBlock {
-    protected render(): DocumentFragment {
-        return this.compile(template, this._props);
-    }
+    constructor (options: BaseBlockOptions = {}) {
+        const profile = Context.getInstance().profile;
 
-    protected componentDidMount(): void {
-        this._props.class = 'profile-container';
-    }
-
-    public static create(profile: Profile) {
-        return new ProfileInfoPage({
+        super(Object.assign({
             title: profile.display_name,
             profile,
             fields: [
@@ -43,7 +38,15 @@ class ProfileInfoPage extends BaseBlock {
                     class: 'profile-link profile-exit-link',
                 }),
             ],
-        });
+        }, options));
+    }
+
+    protected render(): DocumentFragment {
+        return this.compile(template, this._props);
+    }
+
+    protected componentDidMount(): void {
+        this._props.class = 'profile-container';
     }
 }
 

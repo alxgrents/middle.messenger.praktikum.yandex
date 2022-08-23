@@ -1,23 +1,18 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
 import template from './redact-template.hbs';
-import { Profile } from '../../data/profile';
 import Button from '../../components/button';
 import ProfileInfoItem from '../../components/profile-info-item';
 import Form from '../../components/form';
 import Validator from '../../helpers/validator';
+import {BaseBlockOptions} from "../../common/types";
+import {Context} from "../../helpers/context";
 
 class ProfileRedactPage extends BaseBlock {
-    protected render(): DocumentFragment {
-        return this.compile(template, this._props);
-    }
+    constructor (options: BaseBlockOptions = {}) {
+        const profile = Context.getInstance().profile;
 
-    protected componentDidMount(): void {
-        this._props.class = 'profile-container';
-    }
-
-    public static create(profile: Profile) {
-        return new ProfileRedactPage({
+        super(Object.assign({
             title: profile.display_name,
             form: new Form({
                 class: 'profile-form',
@@ -84,7 +79,15 @@ class ProfileRedactPage extends BaseBlock {
                     name: 'submit',
                 }),
             }),
-        });
+        }, options));
+    }
+
+    protected render(): DocumentFragment {
+        return this.compile(template, this._props);
+    }
+
+    protected componentDidMount(): void {
+        this._props.class = 'profile-container';
     }
 }
 

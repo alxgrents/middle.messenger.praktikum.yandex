@@ -8,7 +8,7 @@ export type ProfileData = {
     password: string,
 };
 
-const profile: ProfileData = Object.freeze({
+export const PROFILE: ProfileData = Object.freeze({
     email: 'pochta@yandex.ru',
     login: 'ivanivanov',
     first_name: 'Иван',
@@ -17,4 +17,3 @@ const profile: ProfileData = Object.freeze({
     phone: '+7 (909) 967 30 30',
     password: '123456',
 });
-export default profile;

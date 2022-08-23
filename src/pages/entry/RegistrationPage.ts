@@ -8,16 +8,8 @@ import Form from '../../components/form';
 import Validator from '../../helpers/validator';
 
 class RegistrationPage extends BaseBlock {
-    protected render(): DocumentFragment {
-        return this.compile(template, this._props);
-    }
-
-    protected componentDidMount(): void {
-        this._props.class = 'entry-container registration';
-    }
-
-    public static create() {
-        return new RegistrationPage({
+    constructor(options = {}) {
+        super(Object.assign({
             title: 'Регистрация',
             form: new Form({
                 action: 'chat',
@@ -91,7 +83,16 @@ class RegistrationPage extends BaseBlock {
                 text: 'Войти',
                 class: 'authorization-link',
             }),
-        });
+        }, options));
+
+    }
+
+    protected render(): DocumentFragment {
+        return this.compile(template, this._props);
+    }
+
+    protected componentDidMount(): void {
+        this._props.class = 'entry-container registration';
     }
 }
 

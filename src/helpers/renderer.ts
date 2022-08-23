@@ -12,7 +12,7 @@ export class Renderer {
         this.render = this.render.bind(this);
     }
 
-    render(data: RenderData) {
+    render (data: RenderData) {
         this._root.innerHTML = '';
         if (data instanceof BaseBlock) {
             this._root.appendChild(data.getContent());

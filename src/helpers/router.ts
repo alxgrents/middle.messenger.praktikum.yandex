@@ -1,46 +1,77 @@
-import { RenderData } from './renderer';
+import Route from "./route";
+import BaseBlock from "../common/base-block";
+import {Renderer} from "./renderer";
 
-type Route = () => RenderData;
-export type RouteMap = Record<string, Route>
-type RerenderCallback = (html: RenderData) => void;
+class Router {
+    private static __instance?: Router;
+    private readonly _routes: Route[];
+    private readonly _history: History;
+    private readonly _renderer: Renderer;
+    private _notFoundRoute?: Route;
+    private _currentRoute: Route | null;
 
-export class Router {
-    private readonly _map: RouteMap;
-
-    private readonly _rerenderCallback: RerenderCallback;
-
-    private readonly _notFoundRoute?: Route;
-
-    constructor(map: RouteMap, rerenderCallback: RerenderCallback, notFoundRoute?: Route) {
-        this._map = map;
-        this._rerenderCallback = rerenderCallback;
-        this._notFoundRoute = notFoundRoute;
-    }
-
-    public init(): void {
-        this._addEventListeners();
-        this._onLocationHashChange();
-    }
-
-    private _addEventListeners(): void {
-        window.addEventListener('hashchange', () => this._onLocationHashChange());
-    }
-
-    private _onLocationHashChange(): void {
-        const render = this._map[this._getCurrentRoute()] || this._notFoundRoute;
-
-        if (typeof render === 'function') {
-            this._rerenderCallback(render());
+    constructor (renderer: Renderer) {
+        if (Router.__instance) {
+            return Router.__instance;
         }
+
+        this._routes = [];
+        this._renderer = renderer;
+        this._history = window.history;
+        this._currentRoute = null;
+
+        Router.__instance = this;
     }
 
-    /*
-    todo:
-        Придумать метод роутинга получше, чем на хешах.
-        Когда подумаю, то возможно метод нужно поменять на статичный. Пока не меняю
-     */
-    // eslint-disable-next-line class-methods-use-this
-    private _getCurrentRoute(): string {
-        return window.location.hash.replace('#', '');
+    use (pathname: string, blockCtor: typeof BaseBlock): Router {
+        const route = new Route(pathname, blockCtor, this._renderer);
+
+        this._routes.push(route);
+        return this;
+    }
+
+    useNotFound (blockCtor: typeof BaseBlock): Router {
+        this._notFoundRoute = new Route('', blockCtor, this._renderer);
+
+        return this;
+    }
+
+    start () {
+        window.onpopstate = () => this._onRoute(window.location.pathname);
+
+        this._onRoute(window.location.pathname);
+    }
+
+    _onRoute (pathname: string) {
+        const route = this._getRoute(pathname);
+        if (!route) {
+            if (this._notFoundRoute) {
+                if (this._currentRoute) {
+                    this._currentRoute.leave();
+                }
+                this._notFoundRoute.render();
+            }
+
+            return;
+        }
+
+        if (this._currentRoute) {
+            this._currentRoute.leave();
+        }
+
+        this._currentRoute = route;
+
+        route.render();
+    }
+
+    go (pathname: string): void {
+        this._history.pushState({}, "", pathname);
+        this._onRoute(pathname);
+    }
+
+    private _getRoute (pathname: string): Route | undefined {
+        return this._routes.find(route => route.match(pathname));
     }
 }
+
+export default Router;

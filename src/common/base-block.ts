@@ -171,13 +171,14 @@ abstract class BaseBlock {
     public hide (): void {
         const originalDisplay = this.getContent().style.display;
         if (originalDisplay !== 'none') {
-            this._originalDisplay = originalDisplay;
+            this._originalDisplay = originalDisplay || 'block';
         }
         this.getContent().style.display = 'none';
     }
 
     public show (): void {
         if (this._originalDisplay) {
+            console.log('_originalDisplay', this._originalDisplay);
             this.getContent().style.display = this._originalDisplay;
         }
     }

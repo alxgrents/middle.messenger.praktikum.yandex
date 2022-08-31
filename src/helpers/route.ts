@@ -28,7 +28,9 @@ class Route {
     }
 
     match (pathname: string) {
-        return pathname === this._pathname;
+        return pathname === this._pathname
+            || pathname === `/${this._pathname}`
+            || new RegExp(`/${this._pathname}\w+`).test(pathname);
     }
 
     render () {

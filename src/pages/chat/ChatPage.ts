@@ -6,6 +6,7 @@ import Message from '../../components/message';
 import { ChatData } from '../../data/chats';
 import { MessageData } from '../../data/messages';
 import {Context} from "../../helpers/context";
+import Link from "../../components/link";
 
 class ChatPage extends BaseBlock {
     constructor (options = {}) {
@@ -14,6 +15,11 @@ class ChatPage extends BaseBlock {
         const currentChat = Context.getInstance().currentChat;
 
         super(Object.assign({
+            profileLink: new Link({
+                href: 'settings',
+                text: 'Профиль',
+                class: 'profile-link',
+            }),
             chats: chats.map((chat: ChatData) => new ChatNavItem({ chat })),
             messages: messages.map((message: MessageData) => new Message({ message })),
             currentChat,

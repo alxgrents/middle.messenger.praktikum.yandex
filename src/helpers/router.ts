@@ -10,13 +10,21 @@ class Router {
     private _notFoundRoute?: Route;
     private _currentRoute: Route | null;
 
-    constructor (renderer: Renderer) {
+    public static getInstance (): Router {
+        if (!this.__instance) {
+            this.__instance = new this();
+        }
+
+        return this.__instance;
+    }
+
+    constructor () {
         if (Router.__instance) {
             return Router.__instance;
         }
 
         this._routes = [];
-        this._renderer = renderer;
+        this._renderer = new Renderer();
         this._history = window.history;
         this._currentRoute = null;
 
@@ -55,7 +63,7 @@ class Router {
             return;
         }
 
-        if (this._currentRoute) {
+        if (this._currentRoute && this._currentRoute !== route) {
             this._currentRoute.leave();
         }
 
@@ -65,6 +73,7 @@ class Router {
     }
 
     go (pathname: string): void {
+        console.log('ROUTER go', pathname);
         this._history.pushState({}, "", pathname);
         this._onRoute(pathname);
     }

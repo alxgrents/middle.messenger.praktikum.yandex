@@ -7,13 +7,15 @@ import Link from '../../components/link';
 import Form from '../../components/form';
 import Validator from "../../helpers/validator";
 import {BaseBlockOptions} from "../../common/types";
+import {EntryService} from "../../services/entry-service";
+import Router from "../../helpers/router";
 
 class AuthorizationPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {
         super(Object.assign({
             title: 'Вход',
             form: new Form({
-                action: 'chat',
+                action: 'messenger',
                 fields: [
                     new InputField({
                         name: 'login',
@@ -43,9 +45,19 @@ class AuthorizationPage extends BaseBlock {
                     text: 'Авторизация',
                     class: 'submit-button',
                 }),
+                onSubmit: async (data) => {
+                    const result = await EntryService.getInstance().signIn({
+                        login: data.login,
+                        password: data.password,
+                    });
+
+                    if (result) {
+                        Router.getInstance().go('messenger');
+                    }
+                },
             }),
             toRegistration: new Link({
-                href: '#registration',
+                href: 'sign-up',
                 text: 'Нет аккаунта?',
                 class: 'registration-link',
             }),

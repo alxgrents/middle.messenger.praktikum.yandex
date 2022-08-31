@@ -9,7 +9,7 @@ class InternalServerErrorPage extends ErrorPage {
             errorCode: '500',
             link: new Link({
                 class: 'to-home-link',
-                href: '#chat',
+                href: 'messenger',
                 text: 'Назад к чатам',
             }),
         }, options));

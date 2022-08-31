@@ -5,6 +5,7 @@ import Validator from '../../helpers/validator';
 
 type FormOptions = BaseBlockOptions & {
     validators?: Record<string, Validator>
+    onSubmit?: (data: Record<string, any>) => any,
 }
 
 type FormProps = BaseBlockProps & {
@@ -15,9 +16,18 @@ class Form extends BaseBlock {
     protected _props: FormProps;
 
     protected _inputs: Record<string, HTMLInputElement>;
+    protected _labels: Record<string, HTMLLabelElement>;
 
     constructor(options: FormOptions, tag = 'form') {
         super(options, tag);
+        this.update({
+            events: {
+                submit: this._onSubmit,
+                focusin: this._validate,
+                focusout: this._validate,
+                input: this._validate,
+            },
+        });
     }
 
     protected render(): DocumentFragment {
@@ -27,28 +37,27 @@ class Form extends BaseBlock {
             Array.from(content.querySelectorAll('input'))
                 .map((element) => [element.name, element]),
         );
+        this._labels = {};
+        Object.keys(this._inputs).forEach((name) => {
+            const label = content.querySelector(`label[for=${name}]`) as HTMLLabelElement;
+            if (label) {
+                this._labels[name] = label;
+            }
+        });
+
 
         return content;
     }
 
-    protected componentDidMount() {
-        super.componentDidMount();
-        this.addBlockEvent('submit', this._onSubmit);
-        this.addBlockEvent('focusin', this._validate);
-        this.addBlockEvent('focusout', this._validate);
-        this.addBlockEvent('input', this._validate);
-    }
-
     private _onSubmit = (event: Event): void => {
+        event.preventDefault();
         if (this._validate()) {
             const data = this._getData();
-            // eslint-disable-next-line no-console
-            console.log(data);
-            // eslint-disable-next-line no-restricted-globals
-            location.hash = this._props.action || '';
-        }
 
-        event.preventDefault();
+            if (typeof this._props.onSubmit === 'function') {
+                this._props.onSubmit(data);
+            }
+        }
     };
 
     private _validate = (): boolean => {
@@ -59,11 +68,18 @@ class Form extends BaseBlock {
                 if (validator) {
                     const isValidated = validator.validate(input.value);
 
+                    const elements = [
+                        input,
+                        this._labels[name],
+                    ].filter(Boolean);
+
                     if (isValidated) {
-                        input.classList.remove('invalid');
-                    } else {
-                        input.classList.add('invalid');
+                        elements.forEach(element => element.classList.remove('invalid'))
                     }
+                    else {
+                        elements.forEach(element => element.classList.add('invalid'))
+                    }
+
                     return isValidated;
                 }
                 return true;

@@ -1,7 +1,6 @@
 import './components';
 import './styles/main.less';
 import Router from './helpers/router';
-import { Renderer } from './helpers/renderer';
 import {
     InternalServerErrorPage,
     NotFoundErrorPage,
@@ -13,24 +12,11 @@ import {
     ChatPage,
 } from "./pages";
 
-function getRoot(rootSelector: string): HTMLElement {
-    const root = document.querySelector(rootSelector);
-
-    if (root instanceof HTMLElement) {
-        return root;
-    }
-    throw new Error('Root element not found!');
-}
-
 export default class App {
-    private readonly _root: HTMLElement;
-
     private readonly _router: Router;
 
-    constructor(rootSelector: string) {
-        this._root = getRoot(rootSelector);
-        const renderer = new Renderer(this._root);
-        this._router = new Router(renderer);
+    constructor() {
+        this._router = new Router();
     }
 
     /**
@@ -40,13 +26,13 @@ export default class App {
         this._router
             .use('error-500', InternalServerErrorPage)
             .use('error-404', NotFoundErrorPage)
-            .use('authorization', AuthorizationPage)
-            .use('registration', RegistrationPage)
-            .use('profile', ProfileInfoPage)
-            .use('profile-redact', ProfileRedactPage)
-            .use('profile-change-password', ProfileChangePasswordPage)
-            .use('chat', ChatPage);
+            .use('sign-in', AuthorizationPage)
+            .use('sign-up', RegistrationPage)
+            .use('settings', ProfileInfoPage)
+            .use('settings-redact', ProfileRedactPage)
+            .use('settings-change-password', ProfileChangePasswordPage)
+            .use('messenger', ChatPage);
 
-        this._router.go('chat');
+        this._router.start();
     }
 }

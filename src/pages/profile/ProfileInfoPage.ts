@@ -5,6 +5,7 @@ import ProfileInfoItem from '../../components/profile-info-item';
 import Link from '../../components/link';
 import {BaseBlockOptions} from "../../common/types";
 import {Context} from "../../helpers/context";
+import {EntryService} from "../../services/entry-service";
 
 class ProfileInfoPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {
@@ -23,19 +24,22 @@ class ProfileInfoPage extends BaseBlock {
             ],
             links: [
                 new Link({
-                    href: '#profile-redact',
+                    href: 'settings-redact',
                     text: 'Изменить данные',
                     class: 'profile-link profile-redact-link',
                 }),
                 new Link({
-                    href: '#profile-change-password',
+                    href: 'settings-change-password',
                     text: 'Изменить пароль',
                     class: 'profile-link',
                 }),
                 new Link({
-                    href: '#authorization',
+                    href: 'sign-in',
                     text: 'Выйти',
                     class: 'profile-link profile-exit-link',
+                    events: {
+                        click: () => EntryService.getInstance().logOut(),
+                    },
                 }),
             ],
         }, options));

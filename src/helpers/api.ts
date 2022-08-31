@@ -26,11 +26,11 @@ class Api {
     private static _instance?: Api;
 
     static getInstance(): Api {
-        if (Api._instance === undefined) {
-            Api._instance = new Api();
+        if (!this._instance) {
+            this._instance = new this();
         }
 
-        return this._instance as Api;
+        return this._instance;
     }
 
     // Пустой приватный конструктор,

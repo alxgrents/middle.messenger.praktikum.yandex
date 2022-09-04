@@ -28,35 +28,23 @@ export class ProfileService {
         return this.__instance;
     }
 
-    async changeInfo (data: ChangeInfoData): Promise<boolean> {
-        try {
-            await Api.getInstance().post(`${BASE_URL}/profile`, {
-                headers: {
-                    'content-type': 'application/json',
-                },
-                data,
-            });
-
-            return true;
-        }
-        catch (e) {
-            return false;
-        }
+    async changeInfo (data: ChangeInfoData): Promise<any> {
+        return Api.getInstance().put(`${BASE_URL}/profile`, {
+            credentials: 'include',
+            headers: {
+                'content-type': 'application/json',
+            },
+            data,
+        });
     }
-    async changePassword (data: ChangePasswordData): Promise<boolean> {
-        try {
-            await Api.getInstance().post(`${BASE_URL}/password`, {
-                headers: {
-                    'content-type': 'application/json',
-                },
-                data,
-            });
-
-            return true;
-        }
-        catch (e) {
-            return false;
-        }
+    async changePassword (data: ChangePasswordData): Promise<any> {
+        return Api.getInstance().put(`${BASE_URL}/password`, {
+            credentials: 'include',
+            headers: {
+                'content-type': 'application/json',
+            },
+            data,
+        });
     }
     // async changeAvatar (data): Promise<boolean> {}
 }

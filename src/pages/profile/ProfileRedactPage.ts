@@ -7,6 +7,8 @@ import Form from '../../components/form';
 import Validator from '../../helpers/validator';
 import {BaseBlockOptions} from "../../common/types";
 import {Context} from "../../helpers/context";
+import {ProfileService} from "../../services";
+import { Router } from '../../helpers/router';
 
 class ProfileRedactPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {
@@ -78,6 +80,19 @@ class ProfileRedactPage extends BaseBlock {
                     type: 'submit',
                     name: 'submit',
                 }),
+                onSubmit: async (data) => {
+                    ProfileService.getInstance().changeInfo({
+                        display_name: data.display_name,
+                        email: data.email,
+                        first_name: data.first_name,
+                        login: data.login,
+                        phone: data.phone,
+                        second_name: data.second_name,
+                    })
+                        .then(() => Router.getInstance().go('settings'))
+                        .catch(() => Router.getInstance().go('error-500'));
+
+                },
             }),
         }, options));
     }

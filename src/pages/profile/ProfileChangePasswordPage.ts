@@ -7,6 +7,8 @@ import Form from '../../components/form';
 import Validator from '../../helpers/validator';
 import {BaseBlockOptions} from "../../common/types";
 import {Context} from "../../helpers/context";
+import {ProfileService} from "../../services";
+import {Router} from "../../helpers/router";
 
 class ProfileChangePasswordPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {
@@ -15,7 +17,6 @@ class ProfileChangePasswordPage extends BaseBlock {
         super(Object.assign({
             title: profile.display_name,
             form: new Form({
-                action: 'profile',
                 class: 'profile-form',
                 fields: [
                     new ProfileInfoItem({
@@ -67,6 +68,18 @@ class ProfileChangePasswordPage extends BaseBlock {
                     type: 'submit',
                     name: 'submit',
                 }),
+                onSubmit: async (data) => {
+                    if (data.new_password_retry !== data.new_password) {
+                        return;
+                    }
+
+                    ProfileService.getInstance().changePassword({
+                        newPassword: data.new_password,
+                        oldPassword: data.old_password,
+                    })
+                        .then(() => Router.getInstance().go('settings'))
+                        .catch(() => Router.getInstance().go('error-500'))
+                },
             }),
         }, options));
     }

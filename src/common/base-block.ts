@@ -1,7 +1,6 @@
 import EventEmitter from '../helpers/event-emitter';
 import {
     readBlockOptions,
-    proxyPropsFactory,
     removeEvents,
     addEvents,
     compileTemplateProps,
@@ -13,6 +12,7 @@ import {
     BaseBlockOptions,
     BaseBlockProps,
 } from './types';
+import {createProxy} from "../utils/create-proxy";
 
 enum Events {
     init = 'init',
@@ -24,7 +24,6 @@ abstract class BaseBlock {
     public readonly id = uniqueId();
 
     private readonly _events = new EventEmitter();
-    private _originalDisplay?: string;
 
     protected readonly _props: BaseBlockProps;
 
@@ -42,7 +41,7 @@ abstract class BaseBlock {
 
         this._tag = tag;
         this._children = children;
-        this._props = proxyPropsFactory(props, {
+        this._props = createProxy(props, {
             onUpdate: this._onUpdate.bind(this),
         });
         this._addEventListeners();
@@ -58,7 +57,7 @@ abstract class BaseBlock {
     }
 
     /**
-     * Метод реализован для того, чтобы былв возможность вложенности компонентов
+     * Метод реализован для того, чтобы была возможность вложенности компонентов
      * Метод будет вызываться для детей при componentDidMount родителя
      */
     public dispatchComponentDidMount(): void {
@@ -169,18 +168,11 @@ abstract class BaseBlock {
     }
 
     public hide (): void {
-        const originalDisplay = this.getContent().style.display;
-        if (originalDisplay !== 'none') {
-            this._originalDisplay = originalDisplay || 'block';
-        }
         this.getContent().style.display = 'none';
     }
 
     public show (): void {
-        if (this._originalDisplay) {
-            console.log('_originalDisplay', this._originalDisplay);
-            this.getContent().style.display = this._originalDisplay;
-        }
+        this.getContent().style.display = '';
     }
 }
 

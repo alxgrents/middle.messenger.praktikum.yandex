@@ -5,7 +5,8 @@ import ProfileInfoItem from '../../components/profile-info-item';
 import Link from '../../components/link';
 import {BaseBlockOptions} from "../../common/types";
 import {Context} from "../../helpers/context";
-import {EntryService} from "../../services/entry-service";
+import {EntryService} from "../../services";
+import {Router} from "../../helpers/router";
 
 class ProfileInfoPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {
@@ -38,7 +39,11 @@ class ProfileInfoPage extends BaseBlock {
                     text: 'Выйти',
                     class: 'profile-link profile-exit-link',
                     events: {
-                        click: () => EntryService.getInstance().logOut(),
+                        click: () => {
+                            EntryService.getInstance().logOut()
+                                .then(() => Router.getInstance().go('sign-in'))
+                                .catch(() => Router.getInstance().go('error-500'));
+                        },
                     },
                 }),
             ],

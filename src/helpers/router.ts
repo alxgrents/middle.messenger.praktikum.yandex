@@ -1,8 +1,9 @@
 import Route from "./route";
 import BaseBlock from "../common/base-block";
 import {Renderer} from "./renderer";
+import {Context} from "./context";
 
-class Router {
+export class Router {
     private static __instance?: Router;
     private readonly _routes: Route[];
     private readonly _history: History;
@@ -31,8 +32,10 @@ class Router {
         Router.__instance = this;
     }
 
-    use (pathname: string, blockCtor: typeof BaseBlock): Router {
-        const route = new Route(pathname, blockCtor, this._renderer);
+    use (pathname: string, blockCtor: typeof BaseBlock, needAuth = false): Router {
+        const route = new Route(pathname, blockCtor, this._renderer, {
+            needAuth,
+        });
 
         this._routes.push(route);
         return this;
@@ -44,10 +47,16 @@ class Router {
         return this;
     }
 
-    start () {
+    start (defaultPathname?: string): void {
         window.onpopstate = () => this._onRoute(window.location.pathname);
 
+        Context.getInstance().on(['isAuth'], (isAuth) => isAuth ? this._onAuth() : this._onLogOut());
+
         this._onRoute(window.location.pathname);
+
+        if (typeof defaultPathname === 'string' && !this._currentRoute) {
+            this.go(defaultPathname);
+        }
     }
 
     _onRoute (pathname: string) {
@@ -67,13 +76,27 @@ class Router {
             this._currentRoute.leave();
         }
 
+        if (route.options.needAuth && !Context.getInstance().isAuth) {
+            this.go('sign-in');
+
+            return;
+        }
+
         this._currentRoute = route;
 
         route.render();
     }
 
+    _onAuth () {
+    }
+
+    _onLogOut () {
+        if (this._currentRoute && this._currentRoute.options.needAuth) {
+            this.go('sign-in');
+        }
+    }
+
     go (pathname: string): void {
-        console.log('ROUTER go', pathname);
         this._history.pushState({}, "", pathname);
         this._onRoute(pathname);
     }
@@ -82,5 +105,3 @@ class Router {
         return this._routes.find(route => route.match(pathname));
     }
 }
-
-export default Router;

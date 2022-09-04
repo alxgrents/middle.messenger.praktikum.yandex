@@ -5,6 +5,7 @@ type RequestOptions = {
     timeout?: number,
     data?: RequestData,
     headers?: RequestHeaders,
+    credentials?: string,
 }
 type AbstractMethodRequestOptions = RequestOptions & {
     method: HTTPMethod,
@@ -66,6 +67,10 @@ class Api {
 
             xhr.open(options.method, customizedUrl);
             Api.setupHeaders(xhr, options.headers);
+
+            if (options.credentials === 'include') {
+                xhr.withCredentials = true;
+            }
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequestReadyState.DONE) {

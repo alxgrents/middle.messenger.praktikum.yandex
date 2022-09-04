@@ -29,39 +29,36 @@ export class EntryService {
         return this.__instance;
     }
 
-    async signUp(data: SignUpData): Promise<boolean> {
-        try {
-            await Api.getInstance().post(`${BASE_URL}/signup`, {
-                headers: {
-                    'content-type': 'application/json',
-                },
-                data,
-            });
-
-            return true;
-        }
-        catch (e) {
-            return false;
-        }
+    async signUp(data: SignUpData): Promise<any> {
+        return Api.getInstance().post(`${BASE_URL}/signup`, {
+            credentials: 'include',
+            headers: {
+                'content-type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            data,
+        });
     }
 
-    async signIn (data: SignInData): Promise<boolean> {
-        try {
-            await Api.getInstance().post(`${BASE_URL}/signin`, {
-                headers: {
-                    'content-type': 'application/json',
-                },
-                data,
-            });
-
-            return true;
-        }
-        catch (e) {
-            return false;
-        }
+    async signIn (data: SignInData): Promise<any> {
+        return Api.getInstance().post(`${BASE_URL}/signin`, {
+            credentials: 'include',
+            headers: {
+                'content-type': 'application/json',
+                'Access-Control-Allow-Origin': 'http://localhost:3000',
+                'Access-Control-Allow-Credentials': 'true',
+                /*
+                headers.append('Access-Control-Allow-Origin', 'http://localhost:3000');
+headers.append('Access-Control-Allow-Credentials', 'true');
+                 */
+            },
+            data,
+        });
     }
 
     async logOut () {
-        return Api.getInstance().post(`${BASE_URL}/logout`);
+        return Api.getInstance().post(`${BASE_URL}/logout`, {
+            credentials: 'include',
+        });
     }
 }

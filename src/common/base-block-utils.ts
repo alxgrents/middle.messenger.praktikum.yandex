@@ -5,27 +5,7 @@ import {
     BaseBlockEvents,
     BaseBlockOptions,
     BaseBlockProps,
-    ProxyConfig,
 } from './types';
-
-export function proxyPropsFactory <T extends Record<string, any>>(
-    target: T,
-    config: ProxyConfig,
-): T {
-    return new Proxy<T>(target, {
-        set(target: T, key: string, value: any, receiver: any): boolean {
-            const oldValue = target[key];
-            const result = Reflect.set(target, key, value, receiver);
-
-            // Намеренно выносим вызов коллбека после собственно самого изменения свойства
-            if (oldValue !== value) {
-                config.onUpdate(key, oldValue, value);
-            }
-
-            return result;
-        },
-    });
-}
 
 function baseBlockArrayCondition(item: any | BaseBlock | BaseBlock[]): boolean {
     return Array.isArray(item) && item.every((subItem) => subItem instanceof BaseBlock);

@@ -1,6 +1,6 @@
 import './components';
 import './styles/main.less';
-import Router from './helpers/router';
+import {Router} from './helpers/router';
 import {
     InternalServerErrorPage,
     NotFoundErrorPage,
@@ -28,11 +28,10 @@ export default class App {
             .use('error-404', NotFoundErrorPage)
             .use('sign-in', AuthorizationPage)
             .use('sign-up', RegistrationPage)
-            .use('settings', ProfileInfoPage)
-            .use('settings-redact', ProfileRedactPage)
-            .use('settings-change-password', ProfileChangePasswordPage)
-            .use('messenger', ChatPage);
-
-        this._router.start();
+            .use('settings', ProfileInfoPage, true)
+            .use('settings-redact', ProfileRedactPage, true)
+            .use('settings-change-password', ProfileChangePasswordPage, true)
+            .use('messenger', ChatPage, true)
+            .start('messenger');
     }
 }

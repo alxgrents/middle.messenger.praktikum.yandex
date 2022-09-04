@@ -7,8 +7,8 @@ import Link from '../../components/link';
 import Form from '../../components/form';
 import Validator from "../../helpers/validator";
 import {BaseBlockOptions} from "../../common/types";
-import {EntryService} from "../../services/entry-service";
-import Router from "../../helpers/router";
+import {EntryService} from "../../services";
+import {Router} from "../../helpers/router";
 
 class AuthorizationPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {
@@ -46,14 +46,12 @@ class AuthorizationPage extends BaseBlock {
                     class: 'submit-button',
                 }),
                 onSubmit: async (data) => {
-                    const result = await EntryService.getInstance().signIn({
+                    EntryService.getInstance().signIn({
                         login: data.login,
                         password: data.password,
-                    });
-
-                    if (result) {
-                        Router.getInstance().go('messenger');
-                    }
+                    })
+                        .then(() => Router.getInstance().go('messenger'))
+                        .catch(() => Router.getInstance().go('error-500'))
                 },
             }),
             toRegistration: new Link({

@@ -6,7 +6,7 @@ import {
 import {expect} from 'chai';
 import { JSDOM } from 'jsdom';
 import BaseBlock from "../../common/base-block";
-import Route from "../route";
+import Route from "../router/route";
 import {Renderer} from "../renderer";
 import * as Handlebars from "handlebars";
 import {BaseBlockOptions} from "../../common/types";

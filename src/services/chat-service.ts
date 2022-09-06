@@ -15,11 +15,21 @@ export class ChatService {
         return this.__instance;
     }
 
-    public create () {
-        return Api.getInstance().post(BASE_URL);
+    public create (title: string) {
+        return Api.getInstance().post(BASE_URL, {
+            withCredentials: true,
+            headers: {
+                'content-type': 'application/json',
+            },
+            data: {
+                title,
+            },
+        });
     }
 
     public getAll () {
-        return Api.getInstance().get(BASE_URL);
+        return Api.getInstance().get(BASE_URL, {
+            withCredentials: true,
+        });
     }
 }

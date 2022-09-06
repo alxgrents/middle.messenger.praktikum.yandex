@@ -1,11 +1,12 @@
 import BaseBlock from "src/common/base-block";
-import {Renderer} from "./renderer";
+import {Renderer} from "../renderer";
 
-type RouteOptions = {
-    needAuth?: boolean,
+export type RouteOptions = {
+    notAuthRedirect?: string,
+    authRedirect?: string,
 }
 
-class Route {
+export class Route {
     public options: RouteOptions;
     private _pathname: string;
     private readonly _renderer;
@@ -50,5 +51,3 @@ class Route {
         this._block.show();
     }
 }
-
-export default Route;

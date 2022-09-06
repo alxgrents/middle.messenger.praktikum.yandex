@@ -40,7 +40,9 @@ abstract class BaseBlock {
         } = readBlockOptions(options);
 
         this._tag = tag;
-        this._children = children;
+        this._children = createProxy(children, {
+            onUpdate: this._onUpdate.bind(this),
+        });
         this._props = createProxy(props, {
             onUpdate: this._onUpdate.bind(this),
         });
@@ -52,8 +54,13 @@ abstract class BaseBlock {
         return this._container;
     }
 
-    public update(props: Record<string, any>): void {
+    public update(options: BaseBlockOptions = {}): void {
+        const {
+            children,
+            props,
+        } = readBlockOptions(options);
         Object.assign(this._props, props);
+        Object.assign(this._children, children);
     }
 
     /**

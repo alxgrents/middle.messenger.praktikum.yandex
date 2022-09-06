@@ -8,7 +8,7 @@ import { JSDOM } from 'jsdom';
 import BaseBlock from "../../common/base-block";
 import * as Handlebars from "handlebars";
 import {BaseBlockOptions} from "../../common/types";
-import { Router } from '../router';
+import { Router } from '../router/router';
 
 function createRouter (): {
     router: Router,

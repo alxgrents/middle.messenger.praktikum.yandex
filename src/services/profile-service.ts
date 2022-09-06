@@ -30,7 +30,7 @@ export class ProfileService {
 
     async changeInfo (data: ChangeInfoData): Promise<any> {
         return Api.getInstance().put(`${BASE_URL}/profile`, {
-            credentials: 'include',
+            withCredentials: true,
             headers: {
                 'content-type': 'application/json',
             },
@@ -39,7 +39,7 @@ export class ProfileService {
     }
     async changePassword (data: ChangePasswordData): Promise<any> {
         return Api.getInstance().put(`${BASE_URL}/password`, {
-            credentials: 'include',
+            withCredentials: true,
             headers: {
                 'content-type': 'application/json',
             },

@@ -2,12 +2,11 @@ import {
     ChatData,
     MessageData,
     ProfileData,
-    CHATS,
     MESSAGES,
-    PROFILE,
 } from "../data";
 import {createProxy} from "../utils/create-proxy";
 import EventEmitter from "./event-emitter";
+import {ChatService, EntryService} from "../services";
 
 type ContextFields = 'chats'
     | 'messages'
@@ -39,15 +38,31 @@ export class Context implements Record<ContextFields, any> {
 
     private constructor () {
         this.events = new EventEmitter();
-        this.chats = createProxy(CHATS, {
+        this.chats = createProxy([], {
             onUpdate: () => this.events.emit('chats', this.chats),
         });
         this.messages = createProxy(MESSAGES, {
             onUpdate: () => this.events.emit('messages', this.chats),
         });
-        this.profile = createProxy(PROFILE, {
+        this.profile = createProxy({}, {
             onUpdate: () => this.events.emit('profile', this.chats),
-        });
+        }) as ProfileData;
+    }
+
+    public async init (): Promise<void> {
+        await EntryService.getInstance().getInfo()
+            .then(data => {
+                Object.assign(this.profile, data);
+                this.isAuth = true;
+            })
+            .catch(() => this.isAuth = false);
+
+        await this.updateChats();
+    }
+
+    public async updateChats () {
+        await ChatService.getInstance().getAll()
+            .then((chats) => this.chats.splice(0, this.chats.length, ...chats));
     }
 
     get isAuth () {
@@ -71,5 +86,13 @@ export class Context implements Record<ContextFields, any> {
 
     get currentChat (): ChatData | undefined {
         return this.chats.find((chat) => chat.selected);
+    }
+
+    selectChat (selectedChat: ChatData): void {
+        if (this.currentChat && this.currentChat.id === selectedChat.id) {
+            return;
+        }
+        this.chats.forEach(chat => chat.selected = chat.id === selectedChat.id);
+        this.events.emit('currentChat', selectedChat);
     }
 }

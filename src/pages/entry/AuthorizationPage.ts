@@ -8,7 +8,8 @@ import Form from '../../components/form';
 import Validator from "../../helpers/validator";
 import {BaseBlockOptions} from "../../common/types";
 import {EntryService} from "../../services";
-import {Router} from "../../helpers/router";
+import {Router} from "../../helpers/router/router";
+import {Context} from "../../helpers/context";
 
 class AuthorizationPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {
@@ -50,6 +51,7 @@ class AuthorizationPage extends BaseBlock {
                         login: data.login,
                         password: data.password,
                     })
+                        .then(() => Context.getInstance().isAuth = true)
                         .then(() => Router.getInstance().go('messenger'))
                         .catch(() => Router.getInstance().go('error-500'))
                 },

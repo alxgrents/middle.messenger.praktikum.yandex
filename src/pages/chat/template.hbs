@@ -1,6 +1,7 @@
 <div class="side-bar">
     {{{profileLink}}}
     <input type="text" name="search" class="search" placeholder="Поиск">
+    {{{createChat}}}
     <div class="scroll">
         {{#each chats}}
             {{{this}}}
@@ -8,13 +9,14 @@
     </div>
 </div>
 <div class="chat">
+    {{#if currentChat}}
     <div class="header">
-        {{#if currentChat}}
+
             <div class="current-chat-info">
                 <img class="avatar" src="{{currentChat.avatar}}" alt="avatar">
                 <b class="name">{{currentChat.name}}</b>
             </div>
-        {{/if}}
+
         <button class="chat-settings">
             <svg width="3" height="16" viewBox="0 0 3 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="1.5" cy="2" r="1.5" fill="#1E1E1E"/>
@@ -50,6 +52,11 @@
                 </svg>
             </button>
         </form>
-
     </div>
+    {{else}}
+        <div class="no-chat">
+            <p>Начните чат!</p>
+        </div>
+    {{/if}}
+
 </div>

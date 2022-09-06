@@ -1,7 +1,7 @@
-import Route from "./route";
-import BaseBlock from "../common/base-block";
-import {Renderer} from "./renderer";
-import {Context} from "./context";
+import {Route, RouteOptions} from "./route";
+import BaseBlock from "../../common/base-block";
+import {Renderer} from "../renderer";
+import {Context} from "../context";
 
 export class Router {
     private static __instance?: Router;
@@ -32,10 +32,8 @@ export class Router {
         Router.__instance = this;
     }
 
-    use (pathname: string, blockCtor: typeof BaseBlock, needAuth = false): Router {
-        const route = new Route(pathname, blockCtor, this._renderer, {
-            needAuth,
-        });
+    use (pathname: string, blockCtor: typeof BaseBlock, options: RouteOptions = {}): Router {
+        const route = new Route(pathname, blockCtor, this._renderer, options);
 
         this._routes.push(route);
         return this;
@@ -50,7 +48,7 @@ export class Router {
     start (defaultPathname?: string): void {
         window.onpopstate = () => this._onRoute(window.location.pathname);
 
-        Context.getInstance().on(['isAuth'], (isAuth) => isAuth ? this._onAuth() : this._onLogOut());
+        Context.getInstance().on(['isAuth'], () => this._onAuthChange());
 
         this._onRoute(window.location.pathname);
 
@@ -76,23 +74,34 @@ export class Router {
             this._currentRoute.leave();
         }
 
-        if (route.options.needAuth && !Context.getInstance().isAuth) {
-            this.go('sign-in');
+        if (this._validateRouteOptions(route)) {
+            this._currentRoute = route;
+            route.render();
+        }
+    }
 
-            return;
+    _validateRouteOptions (route: Route): boolean {
+        if (
+            Context.getInstance().isAuth
+            && route.options.authRedirect !== undefined
+        ) {
+            this.go(route.options.authRedirect);
+            return false;
+        }
+        if (
+            !Context.getInstance().isAuth
+            && route.options.notAuthRedirect !== undefined
+        ) {
+            this.go(route.options.notAuthRedirect);
+            return false;
         }
 
-        this._currentRoute = route;
-
-        route.render();
+        return true;
     }
 
-    _onAuth () {
-    }
-
-    _onLogOut () {
-        if (this._currentRoute && this._currentRoute.options.needAuth) {
-            this.go('sign-in');
+    _onAuthChange (): void {
+        if (this._currentRoute) {
+            this._validateRouteOptions(this._currentRoute);
         }
     }
 

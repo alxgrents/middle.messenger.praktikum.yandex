@@ -31,7 +31,7 @@ export class EntryService {
 
     async signUp(data: SignUpData): Promise<any> {
         return Api.getInstance().post(`${BASE_URL}/signup`, {
-            credentials: 'include',
+            withCredentials: true,
             headers: {
                 'content-type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
@@ -42,23 +42,24 @@ export class EntryService {
 
     async signIn (data: SignInData): Promise<any> {
         return Api.getInstance().post(`${BASE_URL}/signin`, {
-            credentials: 'include',
+            withCredentials: true,
             headers: {
                 'content-type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://localhost:3000',
-                'Access-Control-Allow-Credentials': 'true',
-                /*
-                headers.append('Access-Control-Allow-Origin', 'http://localhost:3000');
-headers.append('Access-Control-Allow-Credentials', 'true');
-                 */
+                'Access-Control-Allow-Origin': '*',
             },
             data,
         });
     }
 
-    async logOut () {
+    async logOut (): Promise<any> {
         return Api.getInstance().post(`${BASE_URL}/logout`, {
-            credentials: 'include',
+            withCredentials: true,
+        });
+    }
+
+    async getInfo (): Promise<any> {
+        return Api.getInstance().get(`${BASE_URL}/user`, {
+            withCredentials: true,
         });
     }
 }

@@ -6,7 +6,7 @@ import Link from '../../components/link';
 import {BaseBlockOptions} from "../../common/types";
 import {Context} from "../../helpers/context";
 import {EntryService} from "../../services";
-import {Router} from "../../helpers/router";
+import {Router} from "../../helpers/router/router";
 
 class ProfileInfoPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {

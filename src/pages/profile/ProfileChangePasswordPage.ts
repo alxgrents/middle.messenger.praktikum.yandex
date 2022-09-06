@@ -8,7 +8,7 @@ import Validator from '../../helpers/validator';
 import {BaseBlockOptions} from "../../common/types";
 import {Context} from "../../helpers/context";
 import {ProfileService} from "../../services";
-import {Router} from "../../helpers/router";
+import {Router} from "../../helpers/router/router";
 
 class ProfileChangePasswordPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {
@@ -77,6 +77,7 @@ class ProfileChangePasswordPage extends BaseBlock {
                         newPassword: data.new_password,
                         oldPassword: data.old_password,
                     })
+                        .then((data) => Object.assign(Context.getInstance().profile, data))
                         .then(() => Router.getInstance().go('settings'))
                         .catch(() => Router.getInstance().go('error-500'))
                 },

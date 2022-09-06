@@ -2,7 +2,7 @@ import BaseBlock from '../../common/base-block';
 import './style.less';
 import template from './template.hbs';
 import {BaseBlockOptions} from "../../common/types";
-import {Router} from "../../helpers/router";
+import {Router} from "../../helpers/router/router";
 
 class Link extends BaseBlock {
     constructor(options: BaseBlockOptions = {}) {

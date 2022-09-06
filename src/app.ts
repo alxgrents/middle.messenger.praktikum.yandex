@@ -1,6 +1,6 @@
 import './components';
 import './styles/main.less';
-import {Router} from './helpers/router';
+import {Router} from './helpers/router/router';
 import {
     InternalServerErrorPage,
     NotFoundErrorPage,
@@ -11,6 +11,7 @@ import {
     ProfileRedactPage,
     ChatPage,
 } from "./pages";
+import {Context} from "./helpers/context";
 
 export default class App {
     private readonly _router: Router;
@@ -19,19 +20,39 @@ export default class App {
         this._router = new Router();
     }
 
-    /**
-     * @public
-     */
-    init () {
+    private readonly _signInPathname = 'sign-in';
+    private readonly _messengerPathname = 'messenger';
+
+    async init () {
         this._router
             .use('error-500', InternalServerErrorPage)
             .use('error-404', NotFoundErrorPage)
-            .use('sign-in', AuthorizationPage)
-            .use('sign-up', RegistrationPage)
-            .use('settings', ProfileInfoPage, true)
-            .use('settings-redact', ProfileRedactPage, true)
-            .use('settings-change-password', ProfileChangePasswordPage, true)
-            .use('messenger', ChatPage, true)
-            .start('messenger');
+            .use(this._signInPathname, AuthorizationPage, {
+                authRedirect: this._messengerPathname,
+            })
+            .use('sign-up', RegistrationPage,{
+                authRedirect: this._messengerPathname,
+            })
+            .use('settings', ProfileInfoPage, {
+                notAuthRedirect: this._signInPathname,
+            })
+            .use('settings-redact', ProfileRedactPage, {
+                notAuthRedirect: this._signInPathname,
+            })
+            .use('settings-change-password', ProfileChangePasswordPage, {
+                notAuthRedirect: this._signInPathname,
+            })
+            .use(this._messengerPathname, ChatPage, {
+                notAuthRedirect: this._signInPathname,
+            });
+
+        await Context.getInstance().init();
+    }
+
+    async run (): Promise<any> {
+        const defaultPage = Context.getInstance().isAuth
+            ? this._messengerPathname
+            : this._signInPathname;
+        this._router.start(defaultPage);
     }
 }

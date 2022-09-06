@@ -7,7 +7,8 @@ import Link from '../../components/link';
 import Form from '../../components/form';
 import Validator from '../../helpers/validator';
 import {EntryService} from "../../services";
-import {Router} from "../../helpers/router";
+import {Router} from "../../helpers/router/router";
+import {Context} from "../../helpers/context";
 
 class RegistrationPage extends BaseBlock {
     constructor(options = {}) {
@@ -88,6 +89,7 @@ class RegistrationPage extends BaseBlock {
                         second_name: data.second_name,
                         phone: data.phone,
                     })
+                        .then(() => Context.getInstance().isAuth = true)
                         .then(() => Router.getInstance().go('messenger'))
                         .catch(() => Router.getInstance().go('error-500'))
                 },

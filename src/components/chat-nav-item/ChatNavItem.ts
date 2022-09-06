@@ -16,6 +16,7 @@ class ChatNavItem extends BaseBlock {
     constructor(options: ChatNavItemOptions) {
         super(options);
         this.update({
+            class: `chat-nav-item ${options.chat.selected ? 'chat-nav-item-selected' : ''}`,
             events: {
                 click: () => Context.getInstance().selectChat(this._props.chat)
             },
@@ -25,8 +26,13 @@ class ChatNavItem extends BaseBlock {
         return this.compile(template, this._props);
     }
 
-    protected componentDidMount(): void {
-        this._props.class = `chat-nav-item ${this._props.selected ? 'chat-nav-item-selected' : ''}`;
+    update(options: BaseBlockOptions = {}): void {
+        if (options.chat) {
+            Object.assign(options, {
+                class: `chat-nav-item ${options.chat.selected ? 'chat-nav-item-selected' : ''}`
+            });
+        }
+        super.update(options);
     }
 }
 

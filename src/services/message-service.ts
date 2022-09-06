@@ -1,6 +1,7 @@
 import {SWAGGER_API_HOST} from "./swagger-api-host";
 import Api from "../helpers/api";
 import EventEmitter from "../helpers/event-emitter";
+import {MessageData} from "../data";
 
 const BASE_URL = `${SWAGGER_API_HOST}/api/v2/chats/token`;
 const BASE_SOCKET_URL = 'wss://ya-praktikum.tech/ws/chats';
@@ -10,11 +11,15 @@ type connectData = {
     chatId: number,
 };
 
+type NewMessageCallback = (message: MessageData) => any;
+
 export class MessageService {
     private static __instance?: MessageService;
     private constructor() {};
     private _sockets = new Map<number,WebSocket>();
     private _events = new EventEmitter();
+    private _socket?: WebSocket;
+    private _newMessageCallback?: NewMessageCallback;
 
     public static getInstance (): MessageService {
         if (!this.__instance) {
@@ -24,12 +29,20 @@ export class MessageService {
         return this.__instance;
     }
 
+    public onNewMessage (callback: NewMessageCallback): void {
+        if (!this._newMessageCallback) {
+            this._newMessageCallback = callback;
+        }
+    }
+
     public async connect ({
         userId,
         chatId,
     }: connectData): Promise<void> {
         let socket = this._sockets.get(chatId);
         if (socket) {
+            this._socket = socket;
+
             return;
         }
 
@@ -39,17 +52,31 @@ export class MessageService {
         socket = new WebSocket(`${BASE_SOCKET_URL}/${userId}/${chatId}/${token}`);
         this._initSocket(chatId, socket);
         this._sockets.set(chatId, socket);
+        this._socket = socket;
+    }
+
+    send (data: MessageData) {
+        if (this._socket) {
+            this._socket.send(JSON.stringify({
+                content: data,
+                type: 'message',
+            }));
+        }
     }
 
     private _initSocket (chatId: number, socket: WebSocket) {
-        socket.addEventListener('close', () => this._events.emit('close', {
-            chatId,
-        }));
+        socket.addEventListener('close', () => {
+            this._sockets.delete(chatId);
+        });
 
-        socket.addEventListener('message', (event) => this._events.emit('message', {
-            chatId,
-            message: event.data,
-        }));
+        socket.addEventListener('message', (event) => {
+            if (this._newMessageCallback) {
+                const result = JSON.parse(event.data);
+                if (result.type === 'message') {
+                    this._newMessageCallback(result.content);
+                }
+            }
+        });
 
         socket.addEventListener('error', () => this._events.emit('error', {
             chatId,

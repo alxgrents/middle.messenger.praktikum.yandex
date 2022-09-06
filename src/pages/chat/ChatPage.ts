@@ -9,7 +9,7 @@ import {Context} from "../../helpers/context";
 import Link from "../../components/link";
 import Form from "../../components/form";
 import Button from "../../components/button";
-import {ChatService} from "../../services";
+import {ChatService, MessageService} from "../../services";
 import {Router} from '../../helpers/router';
 import {BaseBlockOptions} from "../../common/types";
 
@@ -32,11 +32,10 @@ class ChatPage extends BaseBlock {
                     ChatService.getInstance().create('Диалог')
                         .then(() => Context.getInstance().updateChats())
                         .catch(() => Router.getInstance().go('error-500'));
-
                 },
             }),
             chatsData: Context.getInstance().chats,
-            messages: Context.getInstance().messages.map((message: MessageData) => new Message({ message })),
+            messagesData: Context.getInstance().messages,
             currentChat: Context.getInstance().currentChat,
         });
     }
@@ -44,7 +43,12 @@ class ChatPage extends BaseBlock {
     update(options: BaseBlockOptions = {}) {
         if (options.chatsData) {
             Object.assign(options, {
-                chats: Context.getInstance().chats.map((chat: ChatData) => new ChatNavItem({ chat })),
+                chats: options.chatsData.map((chat: ChatData) => new ChatNavItem({ chat })),
+            });
+        }
+        if (options.messagesData) {
+            Object.assign(options, {
+                messages: options.messagesData.map((message: MessageData) => new Message({ message })),
             });
         }
         super.update(options);
@@ -56,6 +60,29 @@ class ChatPage extends BaseBlock {
 
     protected componentDidMount() {
         this._props.class = 'chat-container';
+
+        Context.getInstance().on(['chats'], () => this.update({
+            chatsData: Context.getInstance().chats,
+            currentChat: Context.getInstance().currentChat,
+        }));
+        Context.getInstance().on(['messages'], () => this.update({
+            messagesData: Context.getInstance().messages,
+        }));
+        Context.getInstance().on(['currentChat'], () => {
+            this.update({
+                chatsData: Context.getInstance().chats,
+                currentChat: Context.getInstance().currentChat,
+            });
+            const currentChat = Context.getInstance().currentChat;
+            if (currentChat) {
+                MessageService.getInstance().connect({
+                    chatId: currentChat.id,
+                    userId: Context.getInstance().profile.id,
+                })
+                    .then((...args) => console.error('then', ...args))
+                    .catch((...args) => console.error('catch', ...args));
+            }
+        });
     }
 }
 

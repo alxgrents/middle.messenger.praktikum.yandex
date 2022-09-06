@@ -2,15 +2,15 @@ import {
     ChatData,
     MessageData,
     ProfileData,
-    MESSAGES,
 } from "../data";
 import {createProxy} from "../utils/create-proxy";
 import EventEmitter from "./event-emitter";
-import {ChatService, EntryService} from "../services";
+import {ChatService, EntryService, MessageService} from "../services";
 
 type ContextFields = 'chats'
     | 'messages'
     | 'isAuth'
+    | 'currentChat'
     | 'profile';
 
 type ContextChangeCallback = (options: {
@@ -41,7 +41,7 @@ export class Context implements Record<ContextFields, any> {
         this.chats = createProxy([], {
             onUpdate: () => this.events.emit('chats', this.chats),
         });
-        this.messages = createProxy(MESSAGES, {
+        this.messages = createProxy([], {
             onUpdate: () => this.events.emit('messages', this.chats),
         });
         this.profile = createProxy({}, {
@@ -58,6 +58,9 @@ export class Context implements Record<ContextFields, any> {
             .catch(() => this.isAuth = false);
 
         await this.updateChats();
+        MessageService.getInstance().onNewMessage((message => {
+            this.messages.push(message);
+        }));
     }
 
     public async updateChats () {
@@ -92,7 +95,9 @@ export class Context implements Record<ContextFields, any> {
         if (this.currentChat && this.currentChat.id === selectedChat.id) {
             return;
         }
+        this.messages.splice(0);
         this.chats.forEach(chat => chat.selected = chat.id === selectedChat.id);
         this.events.emit('currentChat', selectedChat);
+        this.events.emit('chats', this.chats);
     }
 }

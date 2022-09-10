@@ -1,18 +1,19 @@
 import BaseBlock from '../../common/base-block';
 import template from './template.hbs';
-import { BaseBlockOptions, BaseBlockProps } from '../../common/types';
+import {BaseBlockOptions, BaseBlockProps} from '../../common/types';
 import Validator from '../../helpers/validator';
 
-type FormOptions = BaseBlockOptions & {
+export type FormOptions = BaseBlockOptions & {
     validators?: Record<string, Validator>
     onSubmit?: (data: Record<string, any>) => any,
 }
 
-type FormProps = BaseBlockProps & {
-    validators?: Record<string, Validator>
+export type FormProps = BaseBlockProps & {
+    validators?: Record<string, Validator>,
+    cleanup?: boolean,
 }
 
-class Form extends BaseBlock {
+export class Form extends BaseBlock {
     protected _props: FormProps;
 
     protected _inputs: Record<string, HTMLInputElement>;
@@ -31,7 +32,11 @@ class Form extends BaseBlock {
     }
 
     protected render(): DocumentFragment {
-        const content = this.compile(template, this._props);
+        return this.compile(template, this._props);
+    }
+
+    protected compile(template: (props?: any) => string, props: BaseBlockProps): DocumentFragment {
+        const content = super.compile(template, props);
 
         this._inputs = Object.fromEntries(
             Array.from(content.querySelectorAll('input'))
@@ -45,8 +50,11 @@ class Form extends BaseBlock {
             }
         });
 
-
         return content;
+    }
+
+    protected clear () {
+        Object.values(this._inputs).forEach(input => input.value='');
     }
 
     private _onSubmit = (event: Event): void => {
@@ -56,6 +64,9 @@ class Form extends BaseBlock {
 
             if (typeof this._props.onSubmit === 'function') {
                 this._props.onSubmit(data);
+            }
+            if (this._props.cleanup) {
+                this.clear();
             }
         }
     };
@@ -97,5 +108,3 @@ class Form extends BaseBlock {
         );
     }
 }
-
-export default Form;

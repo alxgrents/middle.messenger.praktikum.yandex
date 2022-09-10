@@ -4,7 +4,7 @@ import './style.less';
 import InputField from '../../components/input-field';
 import Button from '../../components/button';
 import Link from '../../components/link';
-import Form from '../../components/form';
+import {Form} from '../../components/form';
 import Validator from '../../helpers/validator';
 import {EntryService} from "../../services";
 import {Router} from "../../helpers/router/router";

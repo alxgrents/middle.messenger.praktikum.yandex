@@ -42,6 +42,7 @@ export class MessageService {
         let socket = this._sockets.get(chatId);
         if (socket) {
             this._socket = socket;
+            this.load();
 
             return;
         }
@@ -50,12 +51,28 @@ export class MessageService {
             withCredentials: true,
         });
         socket = new WebSocket(`${BASE_SOCKET_URL}/${userId}/${chatId}/${token}`);
+        if (!socket) {
+            throw new Error('Error create WebSocket');
+        }
         this._initSocket(chatId, socket);
         this._sockets.set(chatId, socket);
         this._socket = socket;
+
+        await new Promise(resolve => socket && socket.addEventListener('open', resolve));
+
+        this.load();
     }
 
-    send (data: MessageData) {
+    load () {
+        if (this._socket) {
+            this._socket.send(JSON.stringify({
+                content: "20",
+                type: "get old"
+            }));
+        }
+    }
+
+    send (data: Partial<MessageData>) {
         if (this._socket) {
             this._socket.send(JSON.stringify({
                 content: data,

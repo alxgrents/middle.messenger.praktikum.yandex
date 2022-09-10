@@ -3,7 +3,7 @@ import './style.less';
 import template from './redact-template.hbs';
 import Button from '../../components/button';
 import ProfileInfoItem from '../../components/profile-info-item';
-import Form from '../../components/form';
+import {Form} from '../../components/form';
 import Validator from '../../helpers/validator';
 import {BaseBlockOptions} from "../../common/types";
 import {Context} from "../../helpers/context";

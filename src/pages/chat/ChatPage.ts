@@ -3,15 +3,16 @@ import './style.less';
 import template from './template.hbs';
 import ChatNavItem from '../../components/chat-nav-item';
 import Message from '../../components/message';
-import { ChatData } from '../../data/chats';
-import { MessageData } from '../../data/messages';
+import { MessageData, ChatData } from '../../data';
 import {Context} from "../../helpers/context";
 import Link from "../../components/link";
-import Form from "../../components/form";
+import {Form} from "../../components/form";
 import Button from "../../components/button";
 import {ChatService, MessageService} from "../../services";
 import {Router} from '../../helpers/router';
 import {BaseBlockOptions} from "../../common/types";
+import { SendMessageForm } from '../../components/send-message-form';
+import Validator from '../../helpers/validator';
 
 class ChatPage extends BaseBlock {
     constructor (options = {}) {
@@ -32,6 +33,20 @@ class ChatPage extends BaseBlock {
                     ChatService.getInstance().create('Диалог')
                         .then(() => Context.getInstance().updateChats())
                         .catch(() => Router.getInstance().go('error-500'));
+                },
+            }),
+            sendMessage: new SendMessageForm({
+                cleanup: true,
+                validators: {
+                    message: Validator.create([
+                        { type: 'min', value: 1 }
+                    ])
+                },
+                onSubmit: (data) => {
+                    console.log('SendMessageForm', data);
+                    MessageService.getInstance().send({
+                        text: data.message,
+                    });
                 },
             }),
             chatsData: Context.getInstance().chats,

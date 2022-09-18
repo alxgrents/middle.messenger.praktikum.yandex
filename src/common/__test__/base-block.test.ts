@@ -1,6 +1,6 @@
 import {
     describe,
-    before,
+    beforeEach,
     it,
 } from 'mocha'
 import {expect} from 'chai';
@@ -40,7 +40,7 @@ function createTestBlock (): {
 }
 
 describe('BaseBlock', () => {
-    before(() => {
+    beforeEach(() => {
         const dom = new JSDOM('<!doctype html><html><body></body></html>', {
             url: 'http://localhost:3000',
         });

@@ -1,6 +1,6 @@
 import {
     describe,
-    before,
+    beforeEach,
     it,
 } from 'mocha'
 import {expect} from 'chai';
@@ -50,7 +50,7 @@ function createBlockCtor (): {
 }
 
 describe('Router', () => {
-    before(() => {
+    beforeEach(() => {
         const dom = new JSDOM('<!doctype html><html><body><div id="root"></div></body></html>', {
             url: 'http://localhost',
         });

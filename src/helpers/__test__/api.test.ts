@@ -1,6 +1,6 @@
 import {
     describe,
-    before,
+    beforeEach,
     it,
 } from 'mocha'
 import {expect} from 'chai';
@@ -19,7 +19,7 @@ function createApi () {
 }
 
 describe('Api', () => {
-    before(() => {
+    beforeEach(() => {
         // @ts-ignore
         global.XMLHttpRequest = useFakeXMLHttpRequest();
         // @ts-ignore
@@ -87,7 +87,7 @@ describe('Api', () => {
             expect(currentRequest?.withCredentials).to.not.true;
 
             api.post('test', {
-                credentials: 'include',
+                withCredentials: true,
             });
             expect(currentRequest).to.not.undefined;
             expect(currentRequest?.withCredentials).to.true;

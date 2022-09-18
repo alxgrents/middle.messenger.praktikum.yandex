@@ -1,12 +1,12 @@
 import {
     describe,
-    before,
+    beforeEach,
     it,
 } from 'mocha'
 import {expect} from 'chai';
 import { JSDOM } from 'jsdom';
 import BaseBlock from "../../common/base-block";
-import Route from "../router/route";
+import {Route} from "../router/route";
 import {Renderer} from "../renderer";
 import * as Handlebars from "handlebars";
 import {BaseBlockOptions} from "../../common/types";
@@ -45,7 +45,7 @@ function createRoute (): {
 }
 
 describe('Route', () => {
-    before(() => {
+    beforeEach(() => {
         const dom = new JSDOM('<!doctype html><html><body><div id="root"></div></body></html>', {
             url: 'http://localhost',
         });

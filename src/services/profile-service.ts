@@ -46,6 +46,5 @@ export class ProfileService {
             data,
         });
     }
-    // async changeAvatar (data): Promise<boolean> {}
 }
 

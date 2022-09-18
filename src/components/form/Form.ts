@@ -5,7 +5,7 @@ import Validator from '../../helpers/validator';
 
 export type FormOptions = BaseBlockOptions & {
     validators?: Record<string, Validator>
-    onSubmit?: (data: Record<string, any>) => any,
+    onSubmit?: (data: Record<string, any>) => void,
 }
 
 export type FormProps = BaseBlockProps & {
@@ -44,7 +44,7 @@ export class Form extends BaseBlock {
         );
         this._labels = {};
         Object.keys(this._inputs).forEach((name) => {
-            const label = content.querySelector(`label[for=${name}]`) as HTMLLabelElement;
+            const label = content.querySelector<HTMLLabelElement>(`label[for=${name}]`);
             if (label) {
                 this._labels[name] = label;
             }

@@ -14,16 +14,12 @@ import {
 } from './types';
 import {createProxy} from "../utils/create-proxy";
 
-enum Events {
-    init = 'init',
-    componentDidMount = 'componentDidMount',
-    render = 'render',
-}
+type BaseBlockEvents = 'init' | 'componentDidMount' | 'render';
 
 abstract class BaseBlock {
     public readonly id = uniqueId();
 
-    private readonly _events = new EventEmitter();
+    private readonly _events = new EventEmitter<BaseBlockEvents>();
 
     protected readonly _props: BaseBlockProps;
 
@@ -47,7 +43,7 @@ abstract class BaseBlock {
             onUpdate: this._onUpdate.bind(this),
         });
         this._addEventListeners();
-        this._events.emit(Events.init);
+        this._events.emit('init');
     }
 
     public getContent(): HTMLElement {
@@ -68,7 +64,7 @@ abstract class BaseBlock {
      * Метод будет вызываться для детей при componentDidMount родителя
      */
     public dispatchComponentDidMount(): void {
-        this._events.emit(Events.componentDidMount);
+        this._events.emit('componentDidMount');
     }
 
     protected componentDidMount(): void {}
@@ -94,9 +90,9 @@ abstract class BaseBlock {
     }
 
     private _addEventListeners() {
-        this._events.once(Events.init, this._init.bind(this));
-        this._events.once(Events.componentDidMount, this._componentDidMount.bind(this));
-        this._events.on(Events.render, this._render.bind(this));
+        this._events.once('init', this._init.bind(this));
+        this._events.once('componentDidMount', this._componentDidMount.bind(this));
+        this._events.on('render', this._render.bind(this));
     }
 
     private _createContainer(): void {
@@ -119,11 +115,11 @@ abstract class BaseBlock {
     private _init() {
         this._createContainer();
         this.dispatchComponentDidMount();
-        this._events.emit(Events.render);
+        this._events.emit('render');
     }
 
     private _onUpdate() {
-        this._events.emit(Events.render);
+        this._events.emit('render');
     }
 
     private _render() {

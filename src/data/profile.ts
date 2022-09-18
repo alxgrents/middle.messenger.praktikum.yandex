@@ -1,4 +1,5 @@
 export type ProfileData = {
+    id: number,
     email: string,
     login: string,
     first_name: string,
@@ -7,14 +8,3 @@ export type ProfileData = {
     phone: string,
     password: string,
 };
-
-const profile: ProfileData = Object.freeze({
-    email: 'pochta@yandex.ru',
-    login: 'ivanivanov',
-    first_name: 'Иван',
-    second_name: 'Иванов',
-    display_name: 'Иван',
-    phone: '+7 (909) 967 30 30',
-    password: '123456',
-});
-export default profile;

@@ -1,7 +1,6 @@
 import EventEmitter from '../helpers/event-emitter';
 import {
     readBlockOptions,
-    proxyPropsFactory,
     removeEvents,
     addEvents,
     compileTemplateProps,
@@ -13,17 +12,14 @@ import {
     BaseBlockOptions,
     BaseBlockProps,
 } from './types';
+import {createProxy} from "../utils/create-proxy";
 
-enum Events {
-    init = 'init',
-    componentDidMount = 'componentDidMount',
-    render = 'render',
-}
+type BaseBlockEvents = 'init' | 'componentDidMount' | 'render';
 
 abstract class BaseBlock {
     public readonly id = uniqueId();
 
-    private readonly _events = new EventEmitter();
+    private readonly _events = new EventEmitter<BaseBlockEvents>();
 
     protected readonly _props: BaseBlockProps;
 
@@ -40,28 +36,35 @@ abstract class BaseBlock {
         } = readBlockOptions(options);
 
         this._tag = tag;
-        this._children = children;
-        this._props = proxyPropsFactory(props, {
+        this._children = createProxy(children, {
+            onUpdate: this._onUpdate.bind(this),
+        });
+        this._props = createProxy(props, {
             onUpdate: this._onUpdate.bind(this),
         });
         this._addEventListeners();
-        this._events.emit(Events.init);
+        this._events.emit('init');
     }
 
     public getContent(): HTMLElement {
         return this._container;
     }
 
-    public update(props: Record<string, any>): void {
+    public update(options: BaseBlockOptions = {}): void {
+        const {
+            children,
+            props,
+        } = readBlockOptions(options);
         Object.assign(this._props, props);
+        Object.assign(this._children, children);
     }
 
     /**
-     * Метод реализован для того, чтобы былв возможность вложенности компонентов
+     * Метод реализован для того, чтобы была возможность вложенности компонентов
      * Метод будет вызываться для детей при componentDidMount родителя
      */
     public dispatchComponentDidMount(): void {
-        this._events.emit(Events.componentDidMount);
+        this._events.emit('componentDidMount');
     }
 
     protected componentDidMount(): void {}
@@ -87,9 +90,9 @@ abstract class BaseBlock {
     }
 
     private _addEventListeners() {
-        this._events.once(Events.init, this._init.bind(this));
-        this._events.once(Events.componentDidMount, this._componentDidMount.bind(this));
-        this._events.on(Events.render, this._render.bind(this));
+        this._events.once('init', this._init.bind(this));
+        this._events.once('componentDidMount', this._componentDidMount.bind(this));
+        this._events.on('render', this._render.bind(this));
     }
 
     private _createContainer(): void {
@@ -112,11 +115,11 @@ abstract class BaseBlock {
     private _init() {
         this._createContainer();
         this.dispatchComponentDidMount();
-        this._events.emit(Events.render);
+        this._events.emit('render');
     }
 
     private _onUpdate() {
-        this._events.emit(Events.render);
+        this._events.emit('render');
     }
 
     private _render() {
@@ -165,6 +168,14 @@ abstract class BaseBlock {
         this.setContainerAttribute('name');
         this.setContainerAttribute('action');
         this.setContainerAttribute('class');
+    }
+
+    public hide (): void {
+        this.getContent().style.display = 'none';
+    }
+
+    public show (): void {
+        this.getContent().style.display = '';
     }
 }
 

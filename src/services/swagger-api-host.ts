@@ -1,0 +1,1 @@
+export const SWAGGER_API_HOST = 'https://ya-praktikum.tech';

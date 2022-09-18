@@ -1,38 +1,58 @@
 import './components';
 import './styles/main.less';
+import {Router} from './helpers/router/router';
 import {
-    notFoundError,
-    PAGE_ROUTES_MAP,
-} from './pages';
-import { Router } from './helpers/router';
-import { Renderer } from './helpers/renderer';
-
-function getRoot(rootSelector: string): HTMLElement {
-    const root = document.querySelector(rootSelector);
-
-    if (root instanceof HTMLElement) {
-        return root;
-    }
-    throw new Error('Root element not found!');
-}
+    InternalServerErrorPage,
+    NotFoundErrorPage,
+    AuthorizationPage,
+    RegistrationPage,
+    ProfileChangePasswordPage,
+    ProfileInfoPage,
+    ProfileRedactPage,
+    ChatPage,
+} from "./pages";
+import {Context} from "./helpers/context";
 
 export default class App {
-    private readonly _root: HTMLElement;
-
     private readonly _router: Router;
 
-    private readonly _renderer: Renderer;
-
-    constructor(rootSelector: string) {
-        this._root = getRoot(rootSelector);
-        this._renderer = new Renderer(this._root);
-        this._router = new Router(PAGE_ROUTES_MAP, this._renderer.render, notFoundError);
+    constructor() {
+        this._router = new Router();
     }
 
-    /**
-     * @public
-     */
-    init() {
-        this._router.init();
+    private readonly _signInPathname = 'sign-in';
+    private readonly _messengerPathname = 'messenger';
+
+    async init () {
+        this._router
+            .use('error-500', InternalServerErrorPage)
+            .use('error-404', NotFoundErrorPage)
+            .use(this._signInPathname, AuthorizationPage, {
+                authRedirect: this._messengerPathname,
+            })
+            .use('sign-up', RegistrationPage,{
+                authRedirect: this._messengerPathname,
+            })
+            .use('settings', ProfileInfoPage, {
+                notAuthRedirect: this._signInPathname,
+            })
+            .use('settings-redact', ProfileRedactPage, {
+                notAuthRedirect: this._signInPathname,
+            })
+            .use('settings-change-password', ProfileChangePasswordPage, {
+                notAuthRedirect: this._signInPathname,
+            })
+            .use(this._messengerPathname, ChatPage, {
+                notAuthRedirect: this._signInPathname,
+            });
+
+        await Context.getInstance().init();
+    }
+
+    async run (): Promise<any> {
+        const defaultPage = Context.getInstance().isAuth
+            ? this._messengerPathname
+            : this._signInPathname;
+        this._router.start(defaultPage);
     }
 }

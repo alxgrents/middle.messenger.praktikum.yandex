@@ -2,20 +2,17 @@ import BaseBlock from '../../common/base-block';
 import './style.less';
 import template from './info-template.hbs';
 import ProfileInfoItem from '../../components/profile-info-item';
-import { Profile } from '../../data/profile';
 import Link from '../../components/link';
+import {BaseBlockOptions} from "../../common/types";
+import {Context} from "../../helpers/context";
+import {EntryService} from "../../services";
+import {Router} from "../../helpers/router/router";
 
 class ProfileInfoPage extends BaseBlock {
-    protected render(): DocumentFragment {
-        return this.compile(template, this._props);
-    }
+    constructor (options: BaseBlockOptions = {}) {
+        const profile = Context.getInstance().profile;
 
-    protected componentDidMount(): void {
-        this._props.class = 'profile-container';
-    }
-
-    public static create(profile: Profile) {
-        return new ProfileInfoPage({
+        super(Object.assign({
             title: profile.display_name,
             profile,
             fields: [
@@ -28,22 +25,37 @@ class ProfileInfoPage extends BaseBlock {
             ],
             links: [
                 new Link({
-                    href: '#profile-redact',
+                    href: 'settings-redact',
                     text: 'Изменить данные',
                     class: 'profile-link profile-redact-link',
                 }),
                 new Link({
-                    href: '#profile-change-password',
+                    href: 'settings-change-password',
                     text: 'Изменить пароль',
                     class: 'profile-link',
                 }),
                 new Link({
-                    href: '#authorization',
+                    href: 'sign-in',
                     text: 'Выйти',
                     class: 'profile-link profile-exit-link',
+                    events: {
+                        click: () => {
+                            EntryService.getInstance().logOut()
+                                .then(() => Router.getInstance().go('sign-in'))
+                                .catch(() => Router.getInstance().go('error-500'));
+                        },
+                    },
                 }),
             ],
-        });
+        }, options));
+    }
+
+    protected render(): DocumentFragment {
+        return this.compile(template, this._props);
+    }
+
+    protected componentDidMount(): void {
+        this._props.class = 'profile-container';
     }
 }
 

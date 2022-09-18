@@ -5,6 +5,7 @@ type RequestOptions = {
     timeout?: number,
     data?: RequestData,
     headers?: RequestHeaders,
+    withCredentials?: boolean,
 }
 type AbstractMethodRequestOptions = RequestOptions & {
     method: HTTPMethod,
@@ -26,11 +27,11 @@ class Api {
     private static _instance?: Api;
 
     static getInstance(): Api {
-        if (Api._instance === undefined) {
-            Api._instance = new Api();
+        if (!this._instance) {
+            this._instance = new this();
         }
 
-        return this._instance as Api;
+        return this._instance;
     }
 
     // Пустой приватный конструктор,
@@ -58,7 +59,7 @@ class Api {
         return this._request(url, { ...options, method: 'patch' });
     }
 
-    private _request(url: string, options: AbstractMethodRequestOptions): Promise<void> {
+    private _request(url: string, options: AbstractMethodRequestOptions): Promise<any> {
         return new Promise((resolve, reject) => {
             const customizedUrl = Api.setupUrl(url, options.method, options.data);
 
@@ -67,10 +68,22 @@ class Api {
             xhr.open(options.method, customizedUrl);
             Api.setupHeaders(xhr, options.headers);
 
+            if (options.withCredentials) {
+                xhr.withCredentials = true;
+            }
+
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequestReadyState.DONE) {
                     if (xhr.status === HTTPStatus.OK) {
-                        resolve();
+                        let result = xhr.response;
+                        const responseContentTypeHeader = xhr.getResponseHeader('content-type');
+                        if (
+                            typeof responseContentTypeHeader === 'string' &&
+                            responseContentTypeHeader.toLowerCase().includes('application/json')
+                        ) {
+                            result = JSON.parse(result);
+                        }
+                        resolve(result);
                     } else {
                         reject();
                     }

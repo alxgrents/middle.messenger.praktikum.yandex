@@ -1,23 +1,20 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
 import template from './redact-template.hbs';
-import { Profile } from '../../data/profile';
 import Button from '../../components/button';
 import ProfileInfoItem from '../../components/profile-info-item';
-import Form from '../../components/form';
+import {Form} from '../../components/form';
 import Validator from '../../helpers/validator';
+import {BaseBlockOptions} from "../../common/types";
+import {Context} from "../../helpers/context";
+import {ProfileService} from "../../services";
+import { Router } from '../../helpers/router/router';
 
 class ProfileRedactPage extends BaseBlock {
-    protected render(): DocumentFragment {
-        return this.compile(template, this._props);
-    }
+    constructor (options: BaseBlockOptions = {}) {
+        const profile = Context.getInstance().profile;
 
-    protected componentDidMount(): void {
-        this._props.class = 'profile-container';
-    }
-
-    public static create(profile: Profile) {
-        return new ProfileRedactPage({
+        super(Object.assign({
             title: profile.display_name,
             form: new Form({
                 class: 'profile-form',
@@ -83,8 +80,30 @@ class ProfileRedactPage extends BaseBlock {
                     type: 'submit',
                     name: 'submit',
                 }),
+                onSubmit: async (data) => {
+                    ProfileService.getInstance().changeInfo({
+                        display_name: data.display_name,
+                        email: data.email,
+                        first_name: data.first_name,
+                        login: data.login,
+                        phone: data.phone,
+                        second_name: data.second_name,
+                    })
+                        .then((data) => Object.assign(Context.getInstance().profile, data))
+                        .then(() => Router.getInstance().go('settings'))
+                        .catch(() => Router.getInstance().go('error-500'));
+
+                },
             }),
-        });
+        }, options));
+    }
+
+    protected render(): DocumentFragment {
+        return this.compile(template, this._props);
+    }
+
+    protected componentDidMount(): void {
+        this._props.class = 'profile-container';
     }
 }
 

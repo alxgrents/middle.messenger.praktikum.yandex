@@ -4,20 +4,15 @@ import './style.less';
 import InputField from '../../components/input-field';
 import Button from '../../components/button';
 import Link from '../../components/link';
-import Form from '../../components/form';
+import {Form} from '../../components/form';
 import Validator from '../../helpers/validator';
+import {EntryService} from "../../services";
+import {Router} from "../../helpers/router/router";
+import {Context} from "../../helpers/context";
 
 class RegistrationPage extends BaseBlock {
-    protected render(): DocumentFragment {
-        return this.compile(template, this._props);
-    }
-
-    protected componentDidMount(): void {
-        this._props.class = 'entry-container registration';
-    }
-
-    public static create() {
-        return new RegistrationPage({
+    constructor(options = {}) {
+        super(Object.assign({
             title: 'Регистрация',
             form: new Form({
                 action: 'chat',
@@ -85,13 +80,35 @@ class RegistrationPage extends BaseBlock {
                     text: 'Зарегистрироваться',
                     class: 'submit-button',
                 }),
+                onSubmit: async (data) => {
+                    EntryService.getInstance().signUp({
+                        login: data.login,
+                        password: data.password,
+                        email: data.email,
+                        first_name: data.first_name,
+                        second_name: data.second_name,
+                        phone: data.phone,
+                    })
+                        .then(() => Context.getInstance().isAuth = true)
+                        .then(() => Router.getInstance().go('messenger'))
+                        .catch(() => Router.getInstance().go('error-500'))
+                },
             }),
             toAuthorization: new Link({
-                href: '#authorization',
+                href: 'sign-in',
                 text: 'Войти',
                 class: 'authorization-link',
             }),
-        });
+        }, options));
+
+    }
+
+    protected render(): DocumentFragment {
+        return this.compile(template, this._props);
+    }
+
+    protected componentDidMount(): void {
+        this._props.class = 'entry-container registration';
     }
 }
 

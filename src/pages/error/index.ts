@@ -1,3 +1,7 @@
-import ErrorPage from './ErrorPage';
+import NotFoundErrorPage from './NotFoundErrorPage';
+import InternalServerErrorPage from './InternalServerErrorPage';
 
-export default ErrorPage;
+export {
+    InternalServerErrorPage,
+    NotFoundErrorPage,
+};

@@ -1,26 +1,22 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
 import template from './password-change-template.hbs';
-import { Profile } from '../../data/profile';
 import Button from '../../components/button';
 import ProfileInfoItem from '../../components/profile-info-item';
-import Form from '../../components/form';
+import {Form} from '../../components/form';
 import Validator from '../../helpers/validator';
+import {BaseBlockOptions} from "../../common/types";
+import {Context} from "../../helpers/context";
+import {ProfileService} from "../../services";
+import {Router} from "../../helpers/router/router";
 
 class ProfileChangePasswordPage extends BaseBlock {
-    protected render(): DocumentFragment {
-        return this.compile(template, this._props);
-    }
+    constructor (options: BaseBlockOptions = {}) {
+        const profile = Context.getInstance().profile;
 
-    protected componentDidMount(): void {
-        this._props.class = 'profile-container';
-    }
-
-    public static create(profile: Profile) {
-        return new ProfileChangePasswordPage({
+        super(Object.assign({
             title: profile.display_name,
             form: new Form({
-                action: 'profile',
                 class: 'profile-form',
                 fields: [
                     new ProfileInfoItem({
@@ -72,8 +68,29 @@ class ProfileChangePasswordPage extends BaseBlock {
                     type: 'submit',
                     name: 'submit',
                 }),
+                onSubmit: async (data) => {
+                    if (data.new_password_retry !== data.new_password) {
+                        return;
+                    }
+
+                    ProfileService.getInstance().changePassword({
+                        newPassword: data.new_password,
+                        oldPassword: data.old_password,
+                    })
+                        .then((data) => Object.assign(Context.getInstance().profile, data))
+                        .then(() => Router.getInstance().go('settings'))
+                        .catch(() => Router.getInstance().go('error-500'))
+                },
             }),
-        });
+        }, options));
+    }
+
+    protected render(): DocumentFragment {
+        return this.compile(template, this._props);
+    }
+
+    protected componentDidMount(): void {
+        this._props.class = 'profile-container';
     }
 }
 

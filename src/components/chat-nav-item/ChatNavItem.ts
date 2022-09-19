@@ -1,9 +1,9 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
-import template from './template.hbs';
 import {Context} from "../../helpers/context";
 import {BaseBlockOptions, BaseBlockProps} from "../../common/types";
 import {ChatData} from "../../data";
+const template = require('./template.hbs');
 
 type ChatNavItemOptions  = BaseBlockOptions & {
     chat: ChatData;

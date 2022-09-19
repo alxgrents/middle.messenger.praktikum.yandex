@@ -1,6 +1,6 @@
-import template from './template.hbs';
 import './style.less';
 import BaseBlock from '../../common/base-block';
+const template = require('./template.hbs');
 
 class Button extends BaseBlock {
     constructor(props: any = {}) {

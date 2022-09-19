@@ -1,6 +1,5 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
-import template from './template.hbs';
 import ChatNavItem from '../../components/chat-nav-item';
 import Message from '../../components/message';
 import { MessageData, ChatData } from '../../data';
@@ -13,6 +12,7 @@ import {Router} from '../../helpers/router';
 import {BaseBlockOptions} from "../../common/types";
 import { SendMessageForm } from '../../components/send-message-form';
 import Validator from '../../helpers/validator';
+const template = require('./template.hbs');
 
 class ChatPage extends BaseBlock {
     constructor (options = {}) {

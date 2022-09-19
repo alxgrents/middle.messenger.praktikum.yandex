@@ -21,7 +21,7 @@ type ContextChangeCallback = (options: {
 export class Context implements Record<ContextFields, any> {
     private static __instance: Context;
 
-    public readonly events: EventEmitter;
+    public readonly events: EventEmitter<ContextFields>;
 
     public readonly chats: ChatData[];
     public readonly messages: MessageData[];
@@ -37,7 +37,7 @@ export class Context implements Record<ContextFields, any> {
     }
 
     private constructor () {
-        this.events = new EventEmitter();
+        this.events = new EventEmitter<ContextFields>();
         this.chats = createProxy([], {
             onUpdate: () => this.events.emit('chats', this.chats),
         });

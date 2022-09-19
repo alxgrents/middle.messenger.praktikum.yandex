@@ -1,5 +1,4 @@
 import BaseBlock from '../../common/base-block';
-import template from './registration-template.hbs';
 import './style.less';
 import InputField from '../../components/input-field';
 import Button from '../../components/button';
@@ -7,8 +6,9 @@ import Link from '../../components/link';
 import {Form} from '../../components/form';
 import Validator from '../../helpers/validator';
 import {EntryService} from "../../services";
-import {Router} from "../../helpers/router/router";
+import {Router} from "../../helpers/router";
 import {Context} from "../../helpers/context";
+const template = require('./registration-template.hbs');
 
 class RegistrationPage extends BaseBlock {
     constructor(options = {}) {

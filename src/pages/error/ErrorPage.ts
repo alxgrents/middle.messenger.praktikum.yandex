@@ -1,6 +1,6 @@
 import BaseBlock from '../../common/base-block';
-import template from './template.hbs';
 import './style.less';
+const template = require('./template.hbs');
 
 class ErrorPage extends BaseBlock {
     protected render(): DocumentFragment {

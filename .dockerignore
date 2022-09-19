@@ -1,0 +1,7 @@
+#build folder
+build
+
+#dependensies and cache
+node_modules
+.idea
+.parcel-cache

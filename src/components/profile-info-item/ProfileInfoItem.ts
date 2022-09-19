@@ -1,6 +1,6 @@
 import BaseBlock from '../../common/base-block';
-import template from './template.hbs';
 import './style.less';
+const template = require('./template.hbs');
 
 class ProfileInfoItem extends BaseBlock {
     protected render(): string {

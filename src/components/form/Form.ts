@@ -1,7 +1,7 @@
 import BaseBlock from '../../common/base-block';
-import template from './template.hbs';
 import {BaseBlockOptions, BaseBlockProps} from '../../common/types';
 import Validator from '../../helpers/validator';
+const template = require('./template.hbs');
 
 export type FormOptions = BaseBlockOptions & {
     validators?: Record<string, Validator>

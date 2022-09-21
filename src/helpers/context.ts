@@ -57,10 +57,12 @@ export class Context implements Record<ContextFields, any> {
             })
             .catch(() => this.isAuth = false);
 
-        await this.updateChats();
-        MessageService.getInstance().onNewMessage((message => {
-            this.messages.push(message);
-        }));
+        if (this.isAuth) {
+            await this.updateChats();
+            MessageService.getInstance().onNewMessage((message => {
+                this.messages.push(message);
+            }));
+        }
     }
 
     public async updateChats () {

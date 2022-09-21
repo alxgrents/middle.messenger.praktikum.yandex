@@ -27,5 +27,6 @@
 Александр Гренц (`alx.grents@gmail.com` / `t.me/alxgrents`)
 
 ### **Ссылки**
-- Демо-версия на `Netlify` [ссылка](https://velvety-starship-68df35.netlify.app/)
+- Демо-версия~ на `Netlify` [ссылка](https://velvety-starship-68df35.netlify.app/)
+- Heroku [ссылка](https://grents-ya-app.herokuapp.com/)
 - Дизайн был реализован в figma [ссылка](https://www.figma.com/file/ECSwzzJPxlWAYrpGkqgI5g/alx.grents%2Fmiddle.messenger.praktikum.yandex?node-id=1%3A103)

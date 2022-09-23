@@ -1,6 +1,6 @@
 import {Form, FormOptions} from "../form";
-import template from './template.hbs';
 import './style.less';
+const template = require('./template.hbs');
 
 export class SendMessageForm extends Form {
     constructor(options: FormOptions = {}) {

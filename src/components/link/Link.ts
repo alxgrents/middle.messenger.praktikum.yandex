@@ -1,8 +1,8 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
-import template from './template.hbs';
 import {BaseBlockOptions} from "../../common/types";
-import {Router} from "../../helpers/router/router";
+import {Router} from "../../helpers/router";
+const template = require('./template.hbs');
 
 class Link extends BaseBlock {
     constructor(options: BaseBlockOptions = {}) {

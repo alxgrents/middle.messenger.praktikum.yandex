@@ -8,7 +8,7 @@ import { JSDOM } from 'jsdom';
 import BaseBlock from "../../common/base-block";
 import * as Handlebars from "handlebars";
 import {BaseBlockOptions} from "../../common/types";
-import { Router } from '../router/router';
+import { Router } from '../router';
 
 function createRouter (): {
     router: Router,
@@ -57,6 +57,7 @@ describe('Router', () => {
 
         // @ts-ignore
         global.window = dom.window;
+        // @ts-ignore
         global.HTMLElement = window.HTMLElement;
         //@ts-ignore
         global.document = global.window.document;

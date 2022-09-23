@@ -1,12 +1,12 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
-import template from './info-template.hbs';
 import ProfileInfoItem from '../../components/profile-info-item';
 import Link from '../../components/link';
 import {BaseBlockOptions} from "../../common/types";
 import {Context} from "../../helpers/context";
 import {EntryService} from "../../services";
-import {Router} from "../../helpers/router/router";
+import {Router} from "../../helpers/router";
+const template = require('./info-template.hbs');
 
 class ProfileInfoPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {

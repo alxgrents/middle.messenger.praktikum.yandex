@@ -17,7 +17,7 @@ export class MessageService {
     private static __instance?: MessageService;
     private constructor() {};
     private _sockets = new Map<number,WebSocket>();
-    private _events = new EventEmitter();
+    private _events = new EventEmitter<string>();
     private _socket?: WebSocket;
     private _newMessageCallback?: NewMessageCallback;
 

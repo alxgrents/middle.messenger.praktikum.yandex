@@ -1,6 +1,6 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
-import template from './template.hbs';
+const template = require('./template.hbs');
 
 class Message extends BaseBlock {
     protected render(): string {

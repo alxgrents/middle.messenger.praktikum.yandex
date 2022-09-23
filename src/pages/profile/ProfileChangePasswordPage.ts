@@ -1,6 +1,5 @@
 import BaseBlock from '../../common/base-block';
 import './style.less';
-import template from './password-change-template.hbs';
 import Button from '../../components/button';
 import ProfileInfoItem from '../../components/profile-info-item';
 import {Form} from '../../components/form';
@@ -8,7 +7,8 @@ import Validator from '../../helpers/validator';
 import {BaseBlockOptions} from "../../common/types";
 import {Context} from "../../helpers/context";
 import {ProfileService} from "../../services";
-import {Router} from "../../helpers/router/router";
+import {Router} from "../../helpers/router";
+const template = require('./password-change-template.hbs');
 
 class ProfileChangePasswordPage extends BaseBlock {
     constructor (options: BaseBlockOptions = {}) {
